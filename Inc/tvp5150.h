@@ -66,6 +66,49 @@ typedef struct
 	uint8_t int_r2;
 }TVP_Status_StructTypeDef; //Status structure
 
+typedef enum
+{
+  TVP_P09_SCLK             = 0x00,  /*!< SCLK (default)  */
+  TVP_P09_PCLK             = 0x01,  /*!< PCLK            */
+}TVP_P09_TypeDef; //Pin 9
+
+typedef enum
+{
+  TVP_P27_INTREQ           = 0x00,  /*!< INTREQ (default)  */
+  TVP_P27_GPCL             = 0x01,  /*!< GPCL or VBLK      */
+}TVP_P27_TypeDef; //Pin 27
+
+typedef enum
+{
+  TVP_P24_VSYNC            = 0x00,  /*!< VSYNC (default)   */
+  TVP_P24_PALI             = 0x01,  /*!< PALI              */
+  TVP_P24_LOCK             = 0x02,  /*!< Lock indicator    */
+}TVP_P24_TypeDef; //Pin 24
+
+typedef enum
+{
+  TVP_P23_FID              = 0x00,  /*!< FID                */
+  TVP_P23_GLCO             = 0x01,  /*!< GLCO (default)     */
+  TVP_P23_LOCK             = 0x02,  /*!< Lock indicator     */
+}TVP_P23_TypeDef; //Pin 24
+
+typedef struct
+{
+	TVP_P09_TypeDef pin9;
+	TVP_P27_TypeDef pin27;
+	TVP_P24_TypeDef pin24;
+	TVP_P23_TypeDef pin23;
+	uint8_t VAL;
+}TVP_Pins_StructTypeDef; //Pins config structure
+
+typedef struct
+{
+	uint8_t Contrast;  //0..128(default)..255
+	int8_t Hue;        //-180..0(default)..180
+	uint8_t Saturation;  //0..128(default)..255
+	uint8_t Brightness;  //0..128(default)..255
+}TVP_IC_StructTypeDef; //Image config structure
+
 typedef struct
 {
 	bool VBKO;      //VBKO (pin 27): 0 - GPLC (default); 1 - VBKL
@@ -93,13 +136,13 @@ typedef struct
 #define TVP_Addr_ColorKillerControl 0x6
 #define TVP_Addr_LuminanceControl1 0x7
 #define TVP_Addr_LuminanceControl2 0x8
-#define TVP_Addr_BrightnessControl 0x9
-#define TVP_Addr_ColorSaturationControl 0x0A
-#define TVP_Addr_HueControl 0x0B
-#define TVP_Addr_ContrastControl 0x0C
+#define TVP_Addr_BrightnessControl 0x9     //*
+#define TVP_Addr_SaturationControl 0x0A    //*
+#define TVP_Addr_HueControl 0x0B           //*
+#define TVP_Addr_ContrastControl 0x0C      //*
 #define TVP_Addr_OutputAndRatesSelect 0x0D
 #define TVP_Addr_LuminanceControl3 0x0E
-#define TVP_Addr_PinsConfig 0x0F
+#define TVP_Addr_PinsConfig 0x0F           //*
 #define TVP_Addr_ActiveVideoCropingStartMSB 0x11
 #define TVP_Addr_ActiveVideoCropingStartLSB 0x12
 #define TVP_Addr_ActiveVideoCropingStopMSB 0x13
@@ -191,6 +234,15 @@ void TVP_GetOperatingModeControls(TVP_OMC_StructTypeDef *res);
 
 void TVP_SetMiscellaneousControls(TVP_SMC_StructTypeDef *res);
 void TVP_GetMiscellaneousControls(TVP_SMC_StructTypeDef *res);
+
+void TVP_InitImageConfig(TVP_IC_StructTypeDef *cfg);
+void TVP_SetImageConfig(TVP_IC_StructTypeDef *cfg);
+void TVP_SetImageConfigA(uint8_t Brightness, uint8_t Contrast, uint8_t Saturation, int8_t Hue);
+void TVP_GetImageConfig(TVP_IC_StructTypeDef *cfg);
+
+void TVP_InitPinsConfig(TVP_Pins_StructTypeDef *pins);
+void TVP_SetPinsConfig(TVP_Pins_StructTypeDef *pins);
+void TVP_GetPinsConfig(TVP_Pins_StructTypeDef *pins);
 
 void TVP_SetVideoStandart(TVP_VS_TypeDef VideoStandart);
 TVP_VS_TypeDef TVP_GetVideoStandart(void);

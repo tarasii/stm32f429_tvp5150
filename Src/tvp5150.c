@@ -3,9 +3,20 @@
 
 void TVP_Init()
 {
+	TVP_Pins_StructTypeDef tpins;
+	TVP_IC_StructTypeDef tcfg;
+	
 	//TVP_Write(TVP_Addr_InputSource, 0);
 	TVP_SetInputSource(TVP_CS_AIP1A); //Same sheet
 	TVP_SetAnalogChannelControls(TVP_ACC_DISABLED, TVP_ACC_DISABLED);
+
+	//TVP_Write(TVP_Addr_PinsConfig, 0x08);
+	TVP_InitPinsConfig(&tpins);
+	TVP_SetPinsConfig(&tpins);
+	
+	//TVP_SetImageConfigA(128,128,128,0);
+	TVP_InitImageConfig(&tcfg);
+	TVP_SetImageConfig(&tcfg);
 }
 
 
@@ -83,6 +94,74 @@ void TVP_GetMiscellaneousControls(TVP_SMC_StructTypeDef *res)
 	res->HSYNK = (bool) ((res->VAL >> 2) | 1);
 	res->VBLK  = (bool) ((res->VAL >> 1) | 1);
 	res->SCLK  = (bool) (res->VAL | 1);
+}
+
+
+void TVP_InitImageConfig(TVP_IC_StructTypeDef *cfg)
+{
+	cfg->Brightness = 128;
+	cfg->Contrast   = 128;
+	cfg->Saturation = 128;
+	cfg->Hue        = 0;
+}
+
+void TVP_SetImageConfig(TVP_IC_StructTypeDef *cfg)
+{
+	TVP_Write(TVP_Addr_BrightnessControl, cfg->Brightness);
+	TVP_Write(TVP_Addr_ContrastControl,   cfg->Contrast);
+	TVP_Write(TVP_Addr_SaturationControl, cfg->Saturation);
+	TVP_Write(TVP_Addr_HueControl,        cfg->Hue);
+}
+
+void TVP_SetImageConfigA(uint8_t Brightness, uint8_t Contrast, uint8_t Saturation, int8_t Hue)
+{
+	TVP_Write(TVP_Addr_BrightnessControl, Brightness);
+	TVP_Write(TVP_Addr_ContrastControl,   Contrast);
+	TVP_Write(TVP_Addr_SaturationControl, Saturation);
+	TVP_Write(TVP_Addr_HueControl,        Hue);
+}
+
+void TVP_GetImageConfig(TVP_IC_StructTypeDef *cfg)
+{
+	cfg->Brightness = TVP_Read(TVP_Addr_BrightnessControl);
+	cfg->Contrast   = TVP_Read(TVP_Addr_ContrastControl);
+	cfg->Saturation = TVP_Read(TVP_Addr_SaturationControl);
+	cfg->Hue        = TVP_Read(TVP_Addr_HueControl);
+}
+
+
+void TVP_InitPinsConfig(TVP_Pins_StructTypeDef *pins)
+{
+	pins->pin23 = TVP_P23_GLCO;
+	pins->pin24 = TVP_P24_VSYNC;
+	pins->pin27 = TVP_P27_INTREQ;
+	pins->pin9  = TVP_P09_SCLK;
+}
+
+void TVP_SetPinsConfig(TVP_Pins_StructTypeDef *pins)
+{
+	uint8_t tmp;
+	
+	tmp = ((pins->pin23 | 2)>>1) * 0x40 + ((pins->pin24 | 2)>>1) * 0x20 + ((pins->pin24 | 2)>>1) * 0x10 
+	    + (pins->pin23 | 1) * 8 + (pins->pin24 | 1) * 4 + pins->pin27 * 2 + pins->pin9;
+	
+	TVP_Write(TVP_Addr_PinsConfig, tmp);
+}
+
+void TVP_GetPinsConfig(TVP_Pins_StructTypeDef *pins)
+{
+	uint8_t tmp;
+	tmp = TVP_Read(TVP_Addr_PinsConfig);
+	pins->VAL = tmp;
+
+	if ((tmp >> 6) | 1)  pins->pin23 = TVP_P23_LOCK;
+	else pins->pin23 = (TVP_P23_TypeDef) ((tmp >> 3) | 1);
+
+	if (((tmp >> 4) | 1) || ((tmp >> 5) | 1)) pins->pin24 = TVP_P24_LOCK;
+	else pins->pin24 = (TVP_P24_TypeDef) ((tmp >> 2) | 1);
+
+	pins->pin27 = (TVP_P27_TypeDef) ((tmp >> 1) | 1);
+	pins->pin9  = (TVP_P09_TypeDef) (tmp | 1);
 }
 
 
