@@ -45,5 +45,5 @@ test429 configuration\main.o: ..\Inc\ltdc.h
 test429 configuration\main.o: ..\Inc\usart.h
 test429 configuration\main.o: ..\Inc\gpio.h
 test429 configuration\main.o: ..\Inc\fmc.h
-test429 configuration\main.o: ..\Src\tvp5150.h
+test429 configuration\main.o: ..\Inc\tvp5150.h
 test429 configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h

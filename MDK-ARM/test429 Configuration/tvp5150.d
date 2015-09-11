@@ -1,5 +1,5 @@
 test429 configuration\tvp5150.o: ..\Src\tvp5150.c
-test429 configuration\tvp5150.o: ..\Src\tvp5150.h
+test429 configuration\tvp5150.o: ..\Inc\tvp5150.h
 test429 configuration\tvp5150.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 test429 configuration\tvp5150.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 test429 configuration\tvp5150.o: ..\Inc\i2c.h

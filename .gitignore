@@ -49,5 +49,7 @@ Temporary Items
 .dep
 /obj/*
 /obj
-/Backup/*
-/Backup
+/Inc/Backup/*
+/Inc/Backup
+/Src/Backup/*
+/Src/Backup
