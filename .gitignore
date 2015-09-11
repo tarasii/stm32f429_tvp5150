@@ -41,3 +41,13 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Ivaniv
+.lst
+.iex
+.bak
+.dep
+/obj/*
+/obj
+/Backup/*
+/Backup
