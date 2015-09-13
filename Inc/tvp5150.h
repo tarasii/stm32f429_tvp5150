@@ -218,6 +218,64 @@ typedef struct
 	uint8_t VAL;
 }TVP_OAR_StructTypeDef; //Outputs and Data Rates Select structure
 
+typedef struct
+{
+	int16_t Start;    //Active Video Cropping Start Pixel: -512..0(default)..511
+	int16_t Stop;     //Active Video Cropping Stop Pixel; -512..0(default)..511
+	bool AVID;        //AVID out active in VBLK: 0 (default) - active; 1 - inactive
+	uint8_t VAL1;
+	uint8_t VAL2;
+	uint8_t VAL3;
+	uint8_t VAL4;
+}TVP_AVC_StructTypeDef; //Active Video Croping structure
+
+typedef struct
+{
+	bool CDTO_LSB;      //CDTO_LSB_Switch (CDTO_SW) forced to: 0; 1 (default)
+	bool GLCO_RTC;      //GLCO/RTC: 1 - GLCO; 0 (default) - RTC
+	uint8_t VAL;
+}TVP_SG_StructTypeDef; //Genlock and RTC Register structure
+
+typedef struct
+{
+	int8_t start;               
+	int8_t stop;               
+}TVP_VB_StructTypeDef; //Vertical Blanking structure
+
+typedef enum
+{
+  TVP_ACGC_Enabled             = 0x00,  /*!< (default)               */
+  TVP_ACGC_Disabled            = 0x02,  /*!<       */
+  TVP_ACGC_Previous            = 0x03,  /*!<       */
+}TVP_ACGC_TypeDef; //Automatic color gain control
+
+typedef enum
+{
+  TVP_CCFM_3_121_4_2    = 0x00,  /*!< 3-line (1, 2, 1)/4 and 2-line comb filter                */
+  TVP_CCFM_3_121_4      = 0x01,  /*!< 3-line (1, 2, 1)/4 comb filter (default NTSC)            */
+  TVP_CCFM_3_101_2_2    = 0x02,  /*!< 3-line (1, 0, 1)/2 comb filter and 2-line comb filter    */
+  TVP_CCFM_3_101_2      = 0x03,  /*!< 3-line (1, 0, 1)/2 comb filter and no comb filte         */
+  TVP_CCFM_4_1111_4_2   = 0x04,  /*!< 4-line (1, 1, 1, 1)/4 and 2-line comb filter                       */
+  TVP_CCFM_4_1111_4     = 0x05,  /*!< 4-line (1, 1, 1, 1)/4 comb filter and no comb filter (default PAL)  */
+  TVP_CCFM_4_1331_4_2   = 0x06,  /*!< 4-line (1, 3, 3, 1)/8 comb filter and 2-line comb filter            */
+  TVP_CCFM_4_1331_4     = 0x07,  /*!< 4-line (1, 3, 3, 1)/8 comb filter and no comb filter     */
+  TVP_CCFM_2_2          = 0x08,  /*!< 2-line comb filter                                       */
+  TVP_CCFM_2            = 0x0F,  /*!< 2-line comb filter                                       */
+}TVP_CCFM_TypeDef; //Chrominance comb filter mode
+
+typedef struct
+{
+	bool ColorPLL_Reset;             //Color PLL: 0 - not reset; 1 (default) - reset               
+	bool CE;                         //Chrominance comb filter (CE): 0 - disable; 1 (default) - enable          
+	bool ACE;                        //Chrominance adaptive comb filter (ACE): 0 - not disable; 1 (default) - enable          
+	TVP_ACGC_TypeDef ACGC;           //Automatic color gain control (ACGC): 0 (default) - enabled         
+	TVP_CCFM_TypeDef CombFilterMode; //Chrominance comb filter mode: 0 (default) - enabled         
+	bool WCF;                        //Wideband chroma filter (WCF): 0 - disable; 1 (default) - enable          
+	TVP_LFS_TypeDef FilterSelect;    //Chrominance filter select: 0 (default)
+	uint8_t VAL1;
+	uint8_t VAL2;
+}TVP_CC_StructTypeDef; //Chrominance Control structure
+
 #define		TVP_WRITE_ADDRESS 0xB8 //I2CSEL = 0
 //#define	TVP_WRITE_ADDRESS 0xBA //I2CSEL = 1
 #define		TVP_READ_ADDRESS 0xB9 //I2CSEL = 0
@@ -239,20 +297,20 @@ typedef struct
 #define TVP_Addr_OutputAndRatesSelect 0x0D //*
 #define TVP_Addr_LuminanceControl3 0x0E    //*
 #define TVP_Addr_PinsConfig 0x0F           //*
-#define TVP_Addr_ActiveVideoCropingStartMSB 0x11
-#define TVP_Addr_ActiveVideoCropingStartLSB 0x12
-#define TVP_Addr_ActiveVideoCropingStopMSB 0x13
-#define TVP_Addr_ActiveVideoCropingStopLSB 0x14
-#define TVP_Addr_Genlock 0x15
-#define TVP_Addr_HorisontalSynkStart 0x16
-#define TVP_Addr_VerticalBlankingStart 0x18
-#define TVP_Addr_VerticalBlankingStop 0x19
-#define TVP_Addr_CrominanceControl1 0x1A
-#define TVP_Addr_CrominanceControl2 0x1B
+#define TVP_Addr_ActiveVideoCropingStartMSB 0x11 //*
+#define TVP_Addr_ActiveVideoCropingStartLSB 0x12 //*
+#define TVP_Addr_ActiveVideoCropingStopMSB 0x13  //*
+#define TVP_Addr_ActiveVideoCropingStopLSB 0x14  //*
+#define TVP_Addr_Genlock 0x15                    //*
+#define TVP_Addr_HorisontalSynkStart 0x16        //*
+#define TVP_Addr_VerticalBlankingStart 0x18      //*
+#define TVP_Addr_VerticalBlankingStop 0x19       //*
+#define TVP_Addr_CrominanceControl1 0x1A         //*
+#define TVP_Addr_CrominanceControl2 0x1B         //*
 #define TVP_Addr_InterruptResetRegisterB 0x1C
 #define TVP_Addr_InterruptEnableRegisterB 0x1D
 #define TVP_Addr_InterruptConfigRegisterB 0x1E
-#define TVP_Addr_VideoStandart 0x28
+#define TVP_Addr_VideoStandart 0x28        //*
 
 #define TVP_Addr_DeviceMSB 0x80            //*//Only read
 #define TVP_Addr_DeviceLSB 0x81            //*
@@ -353,6 +411,21 @@ void TVP_GetImageConfig(TVP_IC_StructTypeDef *cfg);
 void TVP_InitPinsConfig(TVP_Pins_StructTypeDef *pins);
 void TVP_SetPinsConfig(TVP_Pins_StructTypeDef *pins);
 void TVP_GetPinsConfig(TVP_Pins_StructTypeDef *pins);
+
+void TVP_SetActiveVideoCroping(TVP_AVC_StructTypeDef *res);
+void TVP_GetActiveVideoCroping(TVP_AVC_StructTypeDef *res);
+
+void TVP_SetGenlock(bool CDTO_LSB, bool GLCO_RTC);
+void TVP_GetGenlock(TVP_SG_StructTypeDef *res);
+
+void TVP_SetHorizontalSyncStart(uint8_t HSYNC);
+uint8_t TVP_GetHorizontalSyncStart(void);
+
+void TVP_SetVerticalBlanking(TVP_VB_StructTypeDef *res);
+void TVP_GetVerticalBlanking(TVP_VB_StructTypeDef *res);
+
+void TVP_SetChrominanceControl(TVP_CC_StructTypeDef *res);
+void TVP_GetChrominanceControl(TVP_CC_StructTypeDef *res);
 
 void TVP_SetVideoStandart(TVP_VS_TypeDef VideoStandart);
 TVP_VS_TypeDef TVP_GetVideoStandart(void);

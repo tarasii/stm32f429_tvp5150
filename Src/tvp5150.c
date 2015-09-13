@@ -185,6 +185,112 @@ void TVP_GetOutputAndRates(TVP_OAR_StructTypeDef *res)
 	res->YUV_OutputFormat  = (TVP_YOF_TypeDef) (res->VAL  & 7);
 }
 
+//ActiveVideoCroping
+void TVP_SetActiveVideoCroping(TVP_AVC_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = res->AVID * (4 + res->Start & 3);
+	TVP_Write(TVP_Addr_ActiveVideoCropingStartLSB, tmp);
+	
+	tmp = (res->Start >> 2) & 0x0ef + ((res->Start & 0x80)>>6);
+	TVP_Write(TVP_Addr_ActiveVideoCropingStartMSB, tmp);
+	
+	tmp = res->Stop & 0x03;
+	TVP_Write(TVP_Addr_ActiveVideoCropingStopLSB, tmp);
+	
+	tmp = (res->Stop >> 2) & 0x0ef + ((res->Stop & 0x80)>>6);
+	TVP_Write(TVP_Addr_ActiveVideoCropingStopMSB, tmp);
+}
+
+void TVP_GetActiveVideoCroping(TVP_AVC_StructTypeDef *res)
+{
+	res->VAL1  = TVP_Read(TVP_Addr_ActiveVideoCropingStartLSB);
+	res->VAL2  = TVP_Read(TVP_Addr_ActiveVideoCropingStartMSB);
+	res->AVID  = (bool) ((res->VAL1 >> 2) & 1);
+	res->Start = res->VAL2;
+	res->Start = ((res->Start << 2) + (res->VAL1 & 3) | ((res->Start & 0x80) << 8));
+	res->VAL1  = TVP_Read(TVP_Addr_ActiveVideoCropingStopLSB);
+	res->VAL2  = TVP_Read(TVP_Addr_ActiveVideoCropingStopMSB);
+	res->Stop  = res->VAL2;
+	res->Stop  = ((res->Stop << 2) + (res->VAL1 & 3)) | ((res->Stop & 0x80) << 8) ;
+}
+
+//Genlock
+void TVP_SetGenlock(bool CDTO_LSB, bool GLCO_RTC)
+{
+	uint8_t tmp = 0;
+	
+	tmp = (CDTO_LSB << 2) + GLCO_RTC;
+	TVP_Write(TVP_Addr_Genlock, tmp);
+}
+
+void TVP_GetGenlock(TVP_SG_StructTypeDef *res)
+{
+	res->VAL          = TVP_Read(TVP_Addr_Genlock);
+	res->CDTO_LSB     = (bool) ((res->VAL >> 4) & 1);
+	res->GLCO_RTC     = (bool) res->VAL & 0x01;
+}
+
+//Horizontal Sync (HSYNC) Start
+void TVP_SetHorizontalSyncStart(uint8_t HSYNC)
+{
+	TVP_Write(TVP_Addr_HorisontalSynkStart, HSYNC);
+}
+
+uint8_t TVP_GetHorizontalSyncStart()
+{
+	uint8_t res;
+	res = TVP_Read(TVP_Addr_HorisontalSynkStart);
+	return res;
+}
+
+//VerticalBlanking
+void TVP_SetVerticalBlanking(TVP_VB_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = res->start ;
+	TVP_Write(TVP_Addr_VerticalBlankingStart, tmp);
+	
+	tmp = res->stop;
+	TVP_Write(TVP_Addr_VerticalBlankingStop, tmp);
+	
+}
+
+void TVP_GetVerticalBlanking(TVP_VB_StructTypeDef *res)
+{
+	res->start  = TVP_Read(TVP_Addr_VerticalBlankingStart);
+	res->stop   = TVP_Read(TVP_Addr_VerticalBlankingStop);
+}
+
+//Chrominance Control
+void TVP_SetChrominanceControl(TVP_CC_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = (res->ColorPLL_Reset << 4) + (res->CE << 3) + (res->CE << 2) + res->ACGC;
+	TVP_Write(TVP_Addr_CrominanceControl1, tmp);
+	
+	tmp = (res->CombFilterMode << 4) + (res->WCF << 2) + res->FilterSelect;
+	TVP_Write(TVP_Addr_CrominanceControl2, tmp);
+	
+}
+
+void TVP_GetChrominanceControl(TVP_CC_StructTypeDef *res)
+{
+	res->VAL1           = TVP_Read(TVP_Addr_CrominanceControl1);
+	res->ColorPLL_Reset = (bool) ((res->VAL1 >> 4) & 1);
+	res->ACE            = (bool) ((res->VAL1 >> 3) & 1);
+	res->CE             = (bool) ((res->VAL1 >> 2) & 1);
+	res->ACGC           = (TVP_ACGC_TypeDef) (res->VAL1 & 0x03);
+	
+	res->VAL2           = TVP_Read(TVP_Addr_CrominanceControl2);
+	res->CombFilterMode = (TVP_CCFM_TypeDef) ((res->VAL2 >> 4) & 0x0F);
+	res->WCF            = (bool) ((res->VAL2 >> 2) & 1);
+	res->FilterSelect   = (TVP_LFS_TypeDef) (res->VAL2 & 0x03);
+}
+
 
 void TVP_InitImageConfig(TVP_IC_StructTypeDef *cfg)
 {
@@ -267,10 +373,12 @@ TVP_VS_TypeDef TVP_GetVideoStandart()
 
 void TVP_GetInfo(TVP_Info_StructTypeDef *res)
 {
-	res->DeviceId   = (TVP_Read(TVP_Addr_DeviceMSB) << 8) + TVP_Read(TVP_Addr_DeviceLSB);
+	res->DeviceId   = TVP_Read(TVP_Addr_DeviceMSB);
+	res->DeviceId   = (res->DeviceId << 8) + TVP_Read(TVP_Addr_DeviceLSB);
 	res->RAM  =  TVP_Read(TVP_Addr_RAMVersion);
 	res->ROM  =  TVP_Read(TVP_Addr_ROMVersion);
-	res->VerticalLineCount  = (TVP_Read(TVP_Addr_VerticalLineCountMSB) << 8) + TVP_Read(TVP_Addr_VerticalLineCountLSB);
+	res->VerticalLineCount  = TVP_Read(TVP_Addr_VerticalLineCountMSB);
+	res->VerticalLineCount  = (res->VerticalLineCount << 8) + TVP_Read(TVP_Addr_VerticalLineCountLSB);
 }
 
 void TVP_GetStatus(TVP_Status_StructTypeDef *res)
