@@ -92,6 +92,20 @@ typedef enum
   TVP_P23_LOCK             = 0x02,  /*!< Lock indicator     */
 }TVP_P23_TypeDef; //Pin 24
 
+typedef enum
+{
+  TVP_AUTO                 = 0x00,  /*!< (default)               */
+  TVP_Enabled              = 0x02,  /*!<       */
+  TVP_Disabled             = 0x03,  /*!<      */
+}TVP_CK_TypeDef; //Color killer
+
+typedef struct
+{
+	TVP_CK_TypeDef ColorKiller;
+	uint8_t Theshold;
+	uint8_t VAL;
+}TVP_CK_StructTypeDef; //Color killer structure
+
 typedef struct
 {
 	TVP_P09_TypeDef pin9;
@@ -103,11 +117,70 @@ typedef struct
 
 typedef struct
 {
-	uint8_t Contrast;  //0..128(default)..255
-	int8_t Hue;        //-180..0(default)..180
+	uint8_t Contrast;    //0..128(default)..255
+	int8_t Hue;          //-180..0(default)..180
 	uint8_t Saturation;  //0..128(default)..255
 	uint8_t Brightness;  //0..128(default)..255
 }TVP_IC_StructTypeDef; //Image config structure
+
+typedef struct
+{
+	bool palm;        //1(default)
+	bool paln;        //1(default)
+	bool n443;        //1(default)
+	uint8_t VAL;      
+}TVP_ASM_StructTypeDef; //Autoswitch Mask
+
+typedef enum
+{
+  TVP_LSD_0                 = 0x00,  /*!< (default)               */
+  TVP_LSD_Plus1             = 0x01,  /*!<       */
+  TVP_LSD_Plus2             = 0x02,  /*!<       */
+  TVP_LSD_Plus3             = 0x03,  /*!<       */
+  TVP_LSD_Plus4             = 0x04,  /*!<       */
+  TVP_LSD_Plus5             = 0x05,  /*!<       */
+  TVP_LSD_Plus6             = 0x06,  /*!<       */
+  TVP_LSD_Plus7             = 0x07,  /*!<       */
+  TVP_LSD_Minus1            = 0x08,  /*!<       */
+  TVP_LSD_Minus2            = 0x09,  /*!<       */
+  TVP_LSD_Minus3            = 0x0A,  /*!<       */
+  TVP_LSD_Minus4            = 0x0B,  /*!<       */
+  TVP_LSD_Minus5            = 0x0C,  /*!<       */
+  TVP_LSD_Minus6            = 0x0D,  /*!<       */
+  TVP_LSD_Minus7            = 0x0E,  /*!<       */
+  TVP_LSD_Minus8            = 0x0F,  /*!<       */
+}TVP_LSD_TypeDef; //luminance signal dellay
+
+typedef enum
+{
+  TVP_LPG_0                 = 0x00,  /*!< (default)               */
+  TVP_LPG_05                = 0x01,  /*!<       */
+  TVP_LPG_1                 = 0x02,  /*!<       */
+  TVP_LPG_3                 = 0x03,  /*!<       */
+}TVP_LPG_TypeDef; //Peaking gain
+
+typedef enum
+{
+  TVP_LFS_NO                = 0x00,  /*!< (default)               */
+  TVP_LFS_Notch1            = 0x01,  /*!<       */
+  TVP_LFS_Notch2            = 0x02,  /*!<       */
+  TVP_LFS_Notch3            = 0x03,  /*!<       */
+}TVP_LFS_TypeDef; //Luminance filter stop band bandwidth
+
+typedef struct
+{
+	bool BypassMode;         //Luma bypass mode: 0 (default) - bypass the chroma trap and comb filters; 1 - bypass the whole luma processing
+	bool NoPedetal;          //Pedestal on the analog video input signal: 0 (default) - present; 1 -  not present
+	bool NoRawHeader;        //656 ancillary headers for raw data: 0 - insert; 1 (default) - disabled
+	bool VertBlanckBypass;   //Luminance bypass during vertical blanking: 0 (default) - disabled; 1 - enabled
+	TVP_LSD_TypeDef SignalDelay; //Luminance signal delay with respect to chrominance signal
+	bool Filter;             //Luminance filter: 0 (default) - comb filter; 1 - chroma trap filter
+	TVP_LPG_TypeDef PeakingGain; //Peaking gain: 0 (default)
+	TVP_LFS_TypeDef FilterStopBand; //Luminance filter stop band bandwidth (MHz): 0 (default)
+	uint8_t VAL1;      
+	uint8_t VAL2;      
+	uint8_t VAL3;      
+}TVP_LC_StructTypeDef; //LuminanceControl
 
 typedef struct
 {
@@ -122,6 +195,29 @@ typedef struct
 	uint8_t VAL;
 }TVP_SMC_StructTypeDef; //MiscellaneousControls structure
 
+typedef enum
+{
+  TVP_YOF_YUV            = 0x00,  /*!< 4:2:2 YUV               */
+  TVP_YOF_ITU            = 0x07,  /*!< ITU-R BT.656  (default) */
+}TVP_YOF_TypeDef; //YUV output format
+
+typedef enum
+{
+  TVP_YUD_Normal         = 0x00,  /*!< Normal            (default)   */
+  TVP_YUD_Filter         = 0x01,  /*!< Digital composite output pins connected to decimation filter output, decoder function bypassed, 
+	                                data output alternately as Y and UV buses at the SCLK rate  */
+  TVP_YUD_AD             = 0x02,  /*!< YUV output pins connected to A/D output, decoder function bypassed, data output at SCLK rate  */
+}TVP_YUD_TypeDef; //YUV data path bypass
+
+typedef struct
+{
+	bool YUV_CodeRange;               //YUV output code range: 0 - ITU-R BT.601 ; 1 (default) - Extended
+	bool UV_CodeFormat;               //UV code format 0(default) - Offset binary; 1 - Straight binary
+	TVP_YUD_TypeDef YUV_Data;         //YUV data path bypass: 0 (default)
+	TVP_YOF_TypeDef YUV_OutputFormat; //YUV output format: 7 (default)
+	uint8_t VAL;
+}TVP_OAR_StructTypeDef; //Outputs and Data Rates Select structure
+
 #define		TVP_WRITE_ADDRESS 0xB8 //I2CSEL = 0
 //#define	TVP_WRITE_ADDRESS 0xBA //I2CSEL = 1
 #define		TVP_READ_ADDRESS 0xB9 //I2CSEL = 0
@@ -131,17 +227,17 @@ typedef struct
 #define TVP_Addr_AnalogChannelControls 0x1 //*
 #define TVP_Addr_OperatingModeControls 0x2 //*
 #define TVP_Addr_MiscellaneousControls 0x3 //*
-#define TVP_Addr_AutoswitchMask 0x4
-#define TVP_Addr_SoftwareReset 0x5
-#define TVP_Addr_ColorKillerControl 0x6
-#define TVP_Addr_LuminanceControl1 0x7
-#define TVP_Addr_LuminanceControl2 0x8
+#define TVP_Addr_AutoswitchMask 0x4        //*
+#define TVP_Addr_SoftwareReset 0x5         //*
+#define TVP_Addr_ColorKillerControl 0x6    //*
+#define TVP_Addr_LuminanceControl1 0x7     //*
+#define TVP_Addr_LuminanceControl2 0x8     //*
 #define TVP_Addr_BrightnessControl 0x9     //*
 #define TVP_Addr_SaturationControl 0x0A    //*
 #define TVP_Addr_HueControl 0x0B           //*
 #define TVP_Addr_ContrastControl 0x0C      //*
-#define TVP_Addr_OutputAndRatesSelect 0x0D
-#define TVP_Addr_LuminanceControl3 0x0E
+#define TVP_Addr_OutputAndRatesSelect 0x0D //*
+#define TVP_Addr_LuminanceControl3 0x0E    //*
 #define TVP_Addr_PinsConfig 0x0F           //*
 #define TVP_Addr_ActiveVideoCropingStartMSB 0x11
 #define TVP_Addr_ActiveVideoCropingStartLSB 0x12
@@ -234,6 +330,20 @@ void TVP_GetOperatingModeControls(TVP_OMC_StructTypeDef *res);
 
 void TVP_SetMiscellaneousControls(TVP_SMC_StructTypeDef *res);
 void TVP_GetMiscellaneousControls(TVP_SMC_StructTypeDef *res);
+
+void TVP_SetAutoswitchMask(bool paln, bool palm, bool ntsc443);
+void TVP_GetAutoswitchMask(TVP_ASM_StructTypeDef *res);
+
+void TVP_SoftwareReset(void);
+
+void TVP_SetColorKillerControl(TVP_CK_TypeDef colorKiller, uint8_t theshold);
+void TVP_GetColorKillerControl(TVP_CK_StructTypeDef *res);
+
+void TVP_SetLuminanceControl(TVP_LC_StructTypeDef *res);
+void TVP_GetLuminanceControl(TVP_LC_StructTypeDef *res);
+
+void TVP_SetOutputAndRates(TVP_OAR_StructTypeDef *res);
+void TVP_GetOutputAndRates(TVP_OAR_StructTypeDef *res);
 
 void TVP_InitImageConfig(TVP_IC_StructTypeDef *cfg);
 void TVP_SetImageConfig(TVP_IC_StructTypeDef *cfg);
