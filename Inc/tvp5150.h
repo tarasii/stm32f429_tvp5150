@@ -49,7 +49,7 @@ typedef struct
 
 typedef struct
 {
-	bool AutoInitialize;
+	bool AutoInit;
 	bool AutoClock;
 	uint8_t VAL;
 }TVP_AI_StructTypeDef; //Automatic Initialization
@@ -315,7 +315,7 @@ typedef struct
 
 typedef struct
 {
-	bool SoftwareInitialization;            
+	bool SoftwareInit;            
 	bool MacrovisionDetect;          
 	bool CommandReady;
 	bool FieldRate;
@@ -360,12 +360,58 @@ typedef struct
 	uint8_t VAL;
 }TVP_VDP_StructTypeDef; //VDP Status structure
 
+typedef enum
+{
+  TVP_LFM_WST_PAL_B   = 0x01,  /*!< WST PAL B  */
+  TVP_LFM_WST_PAL_C   = 0x02,  /*!< WST PAL C  */
+  TVP_LFM_WST_NTSC    = 0x03,  /*!< WST NTSC   */
+  TVP_LFM_NABTS_NTSC  = 0x04,  /*!< NABTS NTSC */
+  TVP_LFM_TTX_NTSC    = 0x05,  /*!< TTX NTSC   */
+  TVP_LFM_CC_PAL      = 0x06,  /*!< CC PAL     */
+  TVP_LFM_CC_NTSC     = 0x07,  /*!< CC NTSC    */
+  TVP_LFM_WSS_PAL     = 0x08,  /*!< WSS PAL    */
+  TVP_LFM_WSS_NTSC    = 0x09,  /*!< WSS NTSC   */
+  TVP_LFM_VITC_PAL    = 0x0A,  /*!< VITC PAL   */
+  TVP_LFM_VITC_NTSC   = 0x0B,  /*!< VITC NTSC  */
+  TVP_LFM_VPS_PAL     = 0x0C,  /*!< VPS PAL    */
+  TVP_LFM_Custom1     = 0x0D,  /*!< Custom 1   */
+  TVP_LFM_Custom2     = 0x0E,  /*!< Custom 2   */
+  TVP_LFM_ActiveVideo = 0x0F,  /*!< Active video (VDP off) (default) */
+}TVP_LFM_TypeDef; //Line Mode
+
+typedef struct
+{
+	bool NullFiltering;  //Filtering of null bytes in closed caption modes: 0 - disabled; 1 (default) - enabled          
+	bool SendVBI;        //Send VBI data: 0 - to registers only; 1 (default) - FIFO and the registers        
+	bool ErrorVBI;       //VBI data with errors in the FIFO: 0 - allow; 1 (default) - do not allow
+	bool ErroCorrection; //Error detection and correction: 0 - do not enable; 1 (default) - enable (when bits [3:0] = 1 2, 3, and 4 only)
+  TVP_LFM_TypeDef Mode;
+	uint8_t VAL;
+}TVP_LFM_StructTypeDef; //Line Mode structure
+
+typedef enum
+{
+  TVP_TTC_NOR  = 0x00,  /*!< NOR (default)  */
+  TVP_TTC_NAND = 0x01,  /*!< NAND  */
+  TVP_TTC_OR   = 0x02,  /*!< OR    */
+  TVP_TTC_AND  = 0x03,  /*!< AND   */
+}TVP_TTC_TypeDef; //Filter logic
+
+typedef struct
+{
+	bool Mode;             //0 - Teletext WST PAL mode B (2 header bytes) (default); 1 - Teletext NABTS NTSC mode C (5 header bytes)       
+	bool TeletextFilter2;  //Teletext filter 2 enable: 0 = Disabled (default); 1 = Enable     
+	bool TeletextFilter1;  //Teletext filter 2 enable: 0 = Disabled (default); 1 = Enable
+  TVP_TTC_TypeDef FilterLogic;
+	uint8_t VAL;
+}TVP_TTC_StructTypeDef; //Line Mode structure
+
 #define		TVP_WRITE_ADDRESS 0xB8 //I2CSEL = 0
 //#define	TVP_WRITE_ADDRESS 0xBA //I2CSEL = 1
 #define		TVP_READ_ADDRESS 0xB9 //I2CSEL = 0
 //#define	TVP_READ_ADDRESS 0xBB //I2CSEL = 1
 
-#define TVP_Addr_InputSource                0x00	//*
+#define TVP_Addr_InputSource                0x00 //*
 #define TVP_Addr_AnalogChannelControls      0x01 //*
 #define TVP_Addr_OperatingModeControls      0x02 //*
 #define TVP_Addr_MiscellaneousControls      0x03 //*
@@ -411,51 +457,51 @@ typedef struct
 #define TVP_Addr_StatusRegister4            0x8B //*
 #define TVP_Addr_StatusRegister5            0x8C //*
 
-#define TVP_Addr_ClosedCaptionData1 0x90
+#define TVP_Addr_ClosedCaptionData1 0x90 //*
 #define TVP_Addr_ClosedCaptionData2 0x91
 #define TVP_Addr_ClosedCaptionData3 0x92
 #define TVP_Addr_ClosedCaptionData4 0x93
-#define TVP_Addr_WSS_Data1   0x094
-#define TVP_Addr_WSS_Data2   0x095
-#define TVP_Addr_WSS_Data3   0x096
-#define TVP_Addr_WSS_Data4   0x097
-#define TVP_Addr_WSS_Data5   0x098
-#define TVP_Addr_WSS_Data6   0x099
-#define TVP_Addr_VPS_Data01  0x09A
-#define TVP_Addr_VPS_Data02  0x09B
-#define TVP_Addr_VPS_Data03  0x09C
-#define TVP_Addr_VPS_Data04  0x09D
-#define TVP_Addr_VPS_Data05  0x09E
-#define TVP_Addr_VPS_Data06  0x09F
-#define TVP_Addr_VPS_Data07  0x0A1
-#define TVP_Addr_VPS_Data08  0x0A2
-#define TVP_Addr_VPS_Data09  0x0A3
-#define TVP_Addr_VPS_Data10  0x0A4
-#define TVP_Addr_VPS_Data11  0x0A5
-#define TVP_Addr_VPS_Data12  0x0A6
-#define TVP_Addr_VITC_Data01 0x0A7
-#define TVP_Addr_VITC_Data02 0x0A8
-#define TVP_Addr_VITC_Data03 0x0A9
-#define TVP_Addr_VITC_Data04 0x0A7
-#define TVP_Addr_VITC_Data05 0x0AA
-#define TVP_Addr_VITC_Data06 0x0AB
-#define TVP_Addr_VITC_Data07 0x0AC
-#define TVP_Addr_VITC_Data08 0x0AD
-#define TVP_Addr_VITC_Data09 0x0AE
-#define TVP_Addr_VITC_Data10 0x0AF
-#define TVP_Addr_VBI_FIFO    0x0B0
+#define TVP_Addr_WSS_Data1     0x094 //*
+//#define TVP_Addr_WSS_Data2   0x095
+//#define TVP_Addr_WSS_Data3   0x096
+//#define TVP_Addr_WSS_Data4   0x097
+//#define TVP_Addr_WSS_Data5   0x098
+//#define TVP_Addr_WSS_Data6   0x099
+#define TVP_Addr_VPS_Data01    0x09A //*
+//#define TVP_Addr_VPS_Data02  0x09B
+//#define TVP_Addr_VPS_Data03  0x09C
+//#define TVP_Addr_VPS_Data04  0x09D
+//#define TVP_Addr_VPS_Data05  0x09E
+//#define TVP_Addr_VPS_Data06  0x09F
+//#define TVP_Addr_VPS_Data07  0x0A1
+//#define TVP_Addr_VPS_Data08  0x0A2
+//#define TVP_Addr_VPS_Data09  0x0A3
+//#define TVP_Addr_VPS_Data10  0x0A4
+//#define TVP_Addr_VPS_Data11  0x0A5
+//#define TVP_Addr_VPS_Data12  0x0A6
+#define TVP_Addr_VITC_Data01   0x0A7 //*
+//#define TVP_Addr_VITC_Data02 0x0A8
+//#define TVP_Addr_VITC_Data03 0x0A9
+//#define TVP_Addr_VITC_Data04 0x0A7
+//#define TVP_Addr_VITC_Data05 0x0AA
+//#define TVP_Addr_VITC_Data06 0x0AB
+//#define TVP_Addr_VITC_Data07 0x0AC
+//#define TVP_Addr_VITC_Data08 0x0AD
+//#define TVP_Addr_VITC_Data09 0x0AE
+//#define TVP_Addr_VITC_Data10 0x0AF
+#define TVP_Addr_VBI_FIFO     0x0B0 //*
 
-#define TVP_Addr_TeletextFilter11     0x0B1  //read write
-#define TVP_Addr_TeletextFilter12     0x0B2
-#define TVP_Addr_TeletextFilter13     0x0B3
-#define TVP_Addr_TeletextFilter14     0x0B4
-#define TVP_Addr_TeletextFilter15     0x0B5
-#define TVP_Addr_TeletextFilter21     0x0B6
-#define TVP_Addr_TeletextFilter22     0x0B7
-#define TVP_Addr_TeletextFilter23     0x0B8
-#define TVP_Addr_TeletextFilter24     0x0B9
-#define TVP_Addr_TeletextFilter25     0x0BA
-#define TVP_Addr_TeletextFilterEnable 0x0BB
+#define TVP_Addr_TeletextFilter11      0x0B1 //* //read write
+//#define TVP_Addr_TeletextFilter12    0x0B2
+//#define TVP_Addr_TeletextFilter13    0x0B3
+//#define TVP_Addr_TeletextFilter14    0x0B4
+//#define TVP_Addr_TeletextFilter15    0x0B5
+//#define TVP_Addr_TeletextFilter21    0x0B6
+//#define TVP_Addr_TeletextFilter22    0x0B7
+//#define TVP_Addr_TeletextFilter23    0x0B8
+//#define TVP_Addr_TeletextFilter24    0x0B9
+//#define TVP_Addr_TeletextFilter25    0x0BA
+#define TVP_Addr_TeletextFilterControl 0x0BB //*
 
 #define TVP_Addr_InterruptA_Status    0x0C0 //*
 #define TVP_Addr_InterruptA_Enable    0x0C1 //* 
@@ -474,9 +520,9 @@ typedef struct
 #define TVP_Addr_FIFO_OutputControl      0x0CD //*
 #define TVP_Addr_AutomaticInitialization 0x0CE //*
 #define TVP_Addr_FullFieldEnable         0x0CF //*
-#define TVP_Addr_LineModeRegisterStart   0x0D0
-#define TVP_Addr_LineModeRegisterEnd     0x0FB
-#define TVP_Addr_FullFieldModeRegister   0x0FC
+#define TVP_Addr_LineModeStart           0x0D0 //*
+#define TVP_Addr_LineModeEnd             0x0FB //*
+#define TVP_Addr_FullFieldMode           0x0FC //*
 
 
 void TVP_Init(void);
@@ -558,8 +604,8 @@ void TVP_FIFO_Reset(uint8_t res);
 void TVP_SetFIFO_OutputControl(bool res);
 bool TVP_GetFIFO_OutputControl(void);
 
-void TVP_SetAutomaticInitialization(bool auto_initialize, bool auto_clock);
-void TVP_GetAutomaticInitialization(TVP_AI_StructTypeDef *res);
+void TVP_SetAutomaticInit(bool auto_init, bool auto_clock);
+void TVP_GetAutomaticInit(TVP_AI_StructTypeDef *res);
 
 void TVP_SetPixelAlignment(uint16_t addr);
 uint16_t TVP_GetPixelAlignment(void);
@@ -578,6 +624,21 @@ void TVP_SetInterruptA_Enable(TVP_INTA_StructTypeDef *res);
 void TVP_GetInterruptA_Enable(TVP_INTA_StructTypeDef *res);
 void TVP_SetInterruptA_Status(TVP_INTA_StructTypeDef *res);
 void TVP_GetInterruptA_Status(TVP_INTA_StructTypeDef *res);
+
+void TVP_SetLineMode(uint8_t line_num, TVP_LFM_StructTypeDef *res);
+void TVP_GetLineMode(uint8_t line_num, TVP_LFM_StructTypeDef *res);
+void TVP_SetFieldMode(TVP_LFM_StructTypeDef *res);
+void TVP_GetFieldMode(TVP_LFM_StructTypeDef *res);
+
+uint8_t TVP_GetWSS_Data(uint8_t num);
+uint8_t TVP_GetVPS_Data(uint8_t num);
+uint8_t TVP_GetVITC_Data(uint8_t num);
+uint8_t TVP_GetClosedCapture_Data(uint8_t num);
+uint8_t TVP_GetVBI_FIFO_Data(void);
+
+void TVP_SetTeletextFilterControl(TVP_TTC_StructTypeDef *res);
+void TVP_GetTeletextFilterControl(TVP_TTC_StructTypeDef *res);
+
 
 #endif /*__ tvp5150_H */
 

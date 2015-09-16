@@ -110,10 +110,10 @@ void TVP_SetAutoswitchMask(bool paln, bool palm, bool ntsc443)
 
 void TVP_GetAutoswitchMask(TVP_ASM_StructTypeDef *res)
 {
-	res->VAL   = TVP_Read(TVP_Addr_AutoswitchMask);
-	res->n443  = (bool) ((res->VAL >> 4) & 1);
-	res->paln  = (bool) ((res->VAL >> 3) & 1);
-	res->palm  = (bool) ((res->VAL >> 2) & 1);
+	res->VAL  = TVP_Read(TVP_Addr_AutoswitchMask);
+	res->n443 = (bool) ((res->VAL >> 4) & 1);
+	res->paln = (bool) ((res->VAL >> 3) & 1);
+	res->palm = (bool) ((res->VAL >> 2) & 1);
 }
 
 
@@ -133,9 +133,9 @@ void TVP_SetColorKillerControl(TVP_CK_TypeDef colorKiller, uint8_t theshold)
 
 void TVP_GetColorKillerControl(TVP_CK_StructTypeDef *res)
 {
-	res->VAL          = TVP_Read(TVP_Addr_ColorKillerControl);
-	res->ColorKiller  = (TVP_CK_TypeDef) ((res->VAL >> 4) & 3);
-	res->Theshold     = res->VAL  & 0x1f;
+	res->VAL         = TVP_Read(TVP_Addr_ColorKillerControl);
+	res->ColorKiller = (TVP_CK_TypeDef) ((res->VAL >> 4) & 3);
+	res->Theshold    = res->VAL  & 0x1f;
 }
 
 
@@ -156,17 +156,17 @@ void TVP_SetLuminanceControl(TVP_LC_StructTypeDef *res)
 
 void TVP_GetLuminanceControl(TVP_LC_StructTypeDef *res)
 {
-	res->VAL1              = TVP_Read(TVP_Addr_LuminanceControl1);
-	res->BypassMode        = (bool) ((res->VAL1 >> 7) & 1);
-	res->NoPedetal         = (bool) ((res->VAL1 >> 6) & 1);
-	res->NoRawHeader       = (bool) ((res->VAL1 >> 5) & 1);
-	res->VertBlanckBypass  = (bool) ((res->VAL1 >> 4) & 1);
-	res->SignalDelay       = (TVP_LSD_TypeDef) (res->VAL1 & 0x0f);
-	res->VAL2              = TVP_Read(TVP_Addr_LuminanceControl2);
-	res->Filter            = (bool) ((res->VAL1 >> 6) & 1);
-	res->PeakingGain       = (TVP_LPG_TypeDef) ((res->VAL1 >> 1) & 0x0f);
-	res->VAL3              = TVP_Read(TVP_Addr_LuminanceControl3);
-	res->FilterStopBand    = (TVP_LFS_TypeDef) (res->VAL1 & 0x03);
+	res->VAL1             = TVP_Read(TVP_Addr_LuminanceControl1);
+	res->BypassMode       = (bool) ((res->VAL1 >> 7) & 1);
+	res->NoPedetal        = (bool) ((res->VAL1 >> 6) & 1);
+	res->NoRawHeader      = (bool) ((res->VAL1 >> 5) & 1);
+	res->VertBlanckBypass = (bool) ((res->VAL1 >> 4) & 1);
+	res->SignalDelay      = (TVP_LSD_TypeDef) (res->VAL1 & 0x0f);
+	res->VAL2             = TVP_Read(TVP_Addr_LuminanceControl2);
+	res->Filter           = (bool) ((res->VAL1 >> 6) & 1);
+	res->PeakingGain      = (TVP_LPG_TypeDef) ((res->VAL1 >> 1) & 0x0f);
+	res->VAL3             = TVP_Read(TVP_Addr_LuminanceControl3);
+	res->FilterStopBand   = (TVP_LFS_TypeDef) (res->VAL1 & 0x03);
 }
 
 //OutputAndRates
@@ -181,28 +181,33 @@ void TVP_SetOutputAndRates(TVP_OAR_StructTypeDef *res)
 
 void TVP_GetOutputAndRates(TVP_OAR_StructTypeDef *res)
 {
-	res->VAL            = TVP_Read(TVP_Addr_OutputAndRatesSelect);
-	res->YUV_CodeRange  = (bool) ((res->VAL >> 6) & 1);
-	res->UV_CodeFormat  = (bool) ((res->VAL >> 5) & 1);
-	res->YUV_Data       = (TVP_YUD_TypeDef) ((res->VAL >> 3) & 3);
-	res->YUV_OutputFormat  = (TVP_YOF_TypeDef) (res->VAL  & 7);
+	res->VAL              = TVP_Read(TVP_Addr_OutputAndRatesSelect);
+	res->YUV_CodeRange    = (bool) ((res->VAL >> 6) & 1);
+	res->UV_CodeFormat    = (bool) ((res->VAL >> 5) & 1);
+	res->YUV_Data         = (TVP_YUD_TypeDef) ((res->VAL >> 3) & 3);
+	res->YUV_OutputFormat = (TVP_YOF_TypeDef) (res->VAL  & 7);
 }
 
 //ActiveVideoCroping
 void TVP_SetActiveVideoCroping(TVP_AVC_StructTypeDef *res)
 {
 	uint8_t tmp = 0;
+	int16_t tst;
 	
-	tmp = res->AVID * (4 + res->Start & 3);
+	tst = res->Start;
+	if (tst<0) tst = (-513 - tst);
+	tmp = (res->AVID * 4) + (tst & 3);
 	TVP_Write(TVP_Addr_ActiveVideoCropingStartLSB, tmp);
 	
-	tmp = (res->Start >> 2) & 0x0ef + ((res->Start & 0x80)>>6);
+	tmp = (tst >> 6) & 0x07f + ((tst & 0x8000)>> 8);
 	TVP_Write(TVP_Addr_ActiveVideoCropingStartMSB, tmp);
 	
-	tmp = res->Stop & 0x03;
+	tst = res->Stop;
+	if (tst<0) tst = (-513 - tst);
+	tmp = tst & 0x03;
 	TVP_Write(TVP_Addr_ActiveVideoCropingStopLSB, tmp);
 	
-	tmp = (res->Stop >> 2) & 0x0ef + ((res->Stop & 0x80)>>6);
+	tmp = (tst >> 6) & 0x07f + ((tst & 0x8000) >> 8);
 	TVP_Write(TVP_Addr_ActiveVideoCropingStopMSB, tmp);
 }
 
@@ -212,11 +217,11 @@ void TVP_GetActiveVideoCroping(TVP_AVC_StructTypeDef *res)
 	res->VAL2  = TVP_Read(TVP_Addr_ActiveVideoCropingStartMSB);
 	res->AVID  = (bool) ((res->VAL1 >> 2) & 1);
 	res->Start = res->VAL2;
-	res->Start = ((res->Start << 2) + (res->VAL1 & 3) | ((res->Start & 0x80) << 8));
+	res->Start = (((res->Start & 0x07f) << 2) + (res->VAL1 & 3) | ((res->Start & 0x80) << 8));
 	res->VAL1  = TVP_Read(TVP_Addr_ActiveVideoCropingStopLSB);
 	res->VAL2  = TVP_Read(TVP_Addr_ActiveVideoCropingStopMSB);
 	res->Stop  = res->VAL2;
-	res->Stop  = ((res->Stop << 2) + (res->VAL1 & 3)) | ((res->Stop & 0x80) << 8) ;
+	res->Stop  = (((res->Stop & 0x07f) << 2) + (res->VAL1 & 3)) | ((res->Stop & 0x80) << 8) ;
 }
 
 //Genlock
@@ -230,9 +235,9 @@ void TVP_SetGenlock(bool CDTO_LSB, bool GLCO_RTC)
 
 void TVP_GetGenlock(TVP_SG_StructTypeDef *res)
 {
-	res->VAL          = TVP_Read(TVP_Addr_Genlock);
-	res->CDTO_LSB     = (bool) ((res->VAL >> 4) & 1);
-	res->GLCO_RTC     = (bool) res->VAL & 0x01;
+	res->VAL      = TVP_Read(TVP_Addr_Genlock);
+	res->CDTO_LSB = (bool) ((res->VAL >> 4) & 1);
+	res->GLCO_RTC = (bool) res->VAL & 0x01;
 }
 
 //Horizontal Sync (HSYNC) Start
@@ -263,8 +268,8 @@ void TVP_SetVerticalBlanking(TVP_VB_StructTypeDef *res)
 
 void TVP_GetVerticalBlanking(TVP_VB_StructTypeDef *res)
 {
-	res->start  = TVP_Read(TVP_Addr_VerticalBlankingStart);
-	res->stop   = TVP_Read(TVP_Addr_VerticalBlankingStop);
+	res->start = TVP_Read(TVP_Addr_VerticalBlankingStart);
+	res->stop  = TVP_Read(TVP_Addr_VerticalBlankingStop);
 }
 
 //Chrominance Control
@@ -359,7 +364,7 @@ void TVP_GetPinsConfig(TVP_Pins_StructTypeDef *pins)
 	else pins->pin24 = (TVP_P24_TypeDef) ((tmp >> 2) & 1);
 
 	pins->pin27 = (TVP_P27_TypeDef) ((tmp >> 1) & 1);
-	pins->pin9  = (TVP_P09_TypeDef) (tmp & 1);
+	pins->pin9  = (TVP_P09_TypeDef)  (tmp & 1);
 }
 
 
@@ -377,7 +382,7 @@ TVP_VS_TypeDef TVP_GetVideoStandart()
 void TVP_SetInterruptB_Reset(TVP_INTB_StructTypeDef *res)
 {
 	uint8_t tmp;
-	tmp = res->SoftwareInitialization * 0x80 + res->MacrovisionDetect * 0x40 + res->CommandReady * 0x20 + res->FieldRate * 0x10 
+	tmp = res->SoftwareInit * 0x80 + res->MacrovisionDetect * 0x40 + res->CommandReady * 0x20 + res->FieldRate * 0x10 
 	    + res->LineAlternation * 8 + res->ColorLock * 4 + res->HV_Lock * 2 + res->TV_VCR;
 	TVP_Write(TVP_Addr_InterruptB_Reset, tmp);
 }
@@ -385,20 +390,20 @@ void TVP_SetInterruptB_Reset(TVP_INTB_StructTypeDef *res)
 void TVP_GetInterruptB_Reset(TVP_INTB_StructTypeDef *res)
 {
 	res->VAL                = TVP_Read(TVP_Addr_InterruptB_Reset);
-	res->SoftwareInitialization  = (bool) ((res->VAL >> 7) & 1);
+	res->SoftwareInit       = (bool) ((res->VAL >> 7) & 1);
 	res->MacrovisionDetect  = (bool) ((res->VAL >> 6) & 1);
 	res->CommandReady       = (bool) ((res->VAL >> 5) & 1);
 	res->FieldRate          = (bool) ((res->VAL >> 4) & 1);
 	res->LineAlternation    = (bool) ((res->VAL >> 3) & 1);
 	res->ColorLock          = (bool) ((res->VAL >> 2) & 1);
 	res->HV_Lock            = (bool) ((res->VAL >> 1) & 1);
-	res->TV_VCR             = (bool) (res->VAL & 1);
+	res->TV_VCR             = (bool)  (res->VAL & 1);
 }
 
 void TVP_SetInterruptB_Enable(TVP_INTB_StructTypeDef *res)
 {
 	uint8_t tmp;
-	tmp = res->SoftwareInitialization * 0x80 + res->MacrovisionDetect * 0x40 + res->CommandReady * 0x20 + res->FieldRate * 0x10 
+	tmp = res->SoftwareInit * 0x80 + res->MacrovisionDetect * 0x40 + res->CommandReady * 0x20 + res->FieldRate * 0x10 
 	    + res->LineAlternation * 8 + res->ColorLock * 4 + res->HV_Lock * 2 + res->TV_VCR;
 	TVP_Write(TVP_Addr_InterruptB_Enable, tmp);
 }
@@ -406,14 +411,14 @@ void TVP_SetInterruptB_Enable(TVP_INTB_StructTypeDef *res)
 void TVP_GetInterruptB_Enable(TVP_INTB_StructTypeDef *res)
 {
 	res->VAL                = TVP_Read(TVP_Addr_InterruptB_Enable);
-	res->SoftwareInitialization  = (bool) ((res->VAL >> 7) & 1);
+	res->SoftwareInit       = (bool) ((res->VAL >> 7) & 1);
 	res->MacrovisionDetect  = (bool) ((res->VAL >> 6) & 1);
 	res->CommandReady       = (bool) ((res->VAL >> 5) & 1);
 	res->FieldRate          = (bool) ((res->VAL >> 4) & 1);
 	res->LineAlternation    = (bool) ((res->VAL >> 3) & 1);
 	res->ColorLock          = (bool) ((res->VAL >> 2) & 1);
 	res->HV_Lock            = (bool) ((res->VAL >> 1) & 1);
-	res->TV_VCR             = (bool) (res->VAL & 1);
+	res->TV_VCR             = (bool)  (res->VAL & 1);
 }
 
 //Interrupt B is: 0 (default) - active low; 1 = active high
@@ -430,14 +435,14 @@ bool TVP_GetInterruptB_Polarity()
 void TVP_GetInterruptB_Status(TVP_INTB_StructTypeDef *res)
 {
 	res->VAL                = TVP_Read(TVP_Addr_InterruptB_Status);
-	res->SoftwareInitialization  = (bool) ((res->VAL >> 7) & 1);
+	res->SoftwareInit       = (bool) ((res->VAL >> 7) & 1);
 	res->MacrovisionDetect  = (bool) ((res->VAL >> 6) & 1);
 	res->CommandReady       = (bool) ((res->VAL >> 5) & 1);
 	res->FieldRate          = (bool) ((res->VAL >> 4) & 1);
 	res->LineAlternation    = (bool) ((res->VAL >> 3) & 1);
 	res->ColorLock          = (bool) ((res->VAL >> 2) & 1);
 	res->HV_Lock            = (bool) ((res->VAL >> 1) & 1);
-	res->TV_VCR             = (bool) (res->VAL & 1);
+	res->TV_VCR             = (bool)  (res->VAL & 1);
 }
 
 bool TVP_GetInterruptB_Active()
@@ -446,20 +451,19 @@ bool TVP_GetInterruptB_Active()
 }
 
 
-
 void TVP_GetInfo(TVP_Info_StructTypeDef *res)
 {
 	res->DeviceId   = TVP_Read(TVP_Addr_DeviceMSB);
 	res->DeviceId   = (res->DeviceId << 8) + TVP_Read(TVP_Addr_DeviceLSB);
-	res->RAM  =  TVP_Read(TVP_Addr_RAMVersion);
-	res->ROM  =  TVP_Read(TVP_Addr_ROMVersion);
+	res->RAM        =  TVP_Read(TVP_Addr_RAMVersion);
+	res->ROM        =  TVP_Read(TVP_Addr_ROMVersion);
 	res->VerticalLineCount  = TVP_Read(TVP_Addr_VerticalLineCountMSB);
 	res->VerticalLineCount  = (res->VerticalLineCount << 8) + TVP_Read(TVP_Addr_VerticalLineCountLSB);
 }
 
 void TVP_GetStatus(TVP_Status_StructTypeDef *res)
 {
-	res->VAL1  =  TVP_Read(TVP_Addr_StatusRegister1);
+	res->VAL1          =  TVP_Read(TVP_Addr_StatusRegister1);
 	res->PeakWhiteDetect     = (bool) ((res->VAL1 >> 7) & 1);
 	res->LineAlternating     = (bool) ((res->VAL1 >> 6) & 1);
 	res->FieldRate           = (bool) ((res->VAL1 >> 5) & 1);
@@ -468,15 +472,15 @@ void TVP_GetStatus(TVP_Status_StructTypeDef *res)
 	res->VerticalSyncLock    = (bool) ((res->VAL1 >> 2) & 1);
 	res->HorizontalSyncLock  = (bool) ((res->VAL1 >> 1) & 1);
 	res->TV_VCR              = (bool) (res->VAL1 & 1);
-	res->VAL2  =  TVP_Read(TVP_Addr_StatusRegister2);
+	res->VAL2          =  TVP_Read(TVP_Addr_StatusRegister2);
 	res->WeakSignalDetection = (bool) ((res->VAL2 >> 6) & 1);
 	res->PAL_SwitchPolarity  = (bool) ((res->VAL2 >> 5) & 1);
 	res->FieldSequence       = (bool) ((res->VAL2 >> 4) & 1);
 	res->AGC_AndOffsetFrozen = (bool) ((res->VAL2 >> 3) & 1);
 	res->MacrovisionDetection = (TVP_MD_TypeDef) (res->VAL2 & 3);
-	res->AGC  =  TVP_Read(TVP_Addr_StatusRegister3);
-	res->SCH  =  TVP_Read(TVP_Addr_StatusRegister4);
-	res->VAL3  =  TVP_Read(TVP_Addr_StatusRegister5);
+	res->AGC           =  TVP_Read(TVP_Addr_StatusRegister3);
+	res->SCH           =  TVP_Read(TVP_Addr_StatusRegister4);
+	res->VAL3          =  TVP_Read(TVP_Addr_StatusRegister5);
 	res->PeakWhiteDetect     = (bool) ((res->VAL3 >> 7) & 1);
 	res->VideoStandard       = (TVP_VS_TypeDef) ((res->VAL3  & 0x0F) + 1);
 	res->SamplingRate        = (bool) (res->VAL3 & 1);
@@ -528,19 +532,19 @@ bool TVP_GetFIFO_OutputControl()
 }
 
 //Automatic Initialization
-void TVP_SetAutomaticInitialization(bool auto_initialize, bool auto_clock)
+void TVP_SetAutomaticInit(bool auto_init, bool auto_clock)
 {
 	uint8_t tmp = 0;
 	
-	tmp = (auto_initialize * 4) +  (auto_clock * 2);
+	tmp = (auto_init * 4) +  (auto_clock * 2);
 	TVP_Write(TVP_Addr_AutomaticInitialization, tmp);
 }
 
-void TVP_GetAutomaticInitialization(TVP_AI_StructTypeDef *res)
+void TVP_GetAutomaticInit(TVP_AI_StructTypeDef *res)
 {
-	res->VAL 	 		      = TVP_Read(TVP_Addr_AutomaticInitialization);
-	res->AutoInitialize = (bool) ((res->VAL >> 2) & 1);
-	res->AutoClock 		  = (bool) ((res->VAL >> 1) & 1);
+	res->VAL 	 		 = TVP_Read(TVP_Addr_AutomaticInitialization);
+	res->AutoInit  = (bool) ((res->VAL >> 2) & 1);
+	res->AutoClock = (bool) ((res->VAL >> 1) & 1);
 }
 
 //Pixel Alignment
@@ -592,21 +596,21 @@ void TVP_SetVDPStatus(TVP_VDP_StructTypeDef *res)
 
 void TVP_GetVDPStatus(TVP_VDP_StructTypeDef *res)
 {
-	res->VAL             = TVP_Read(TVP_Addr_VDP_Status);
-	res->FIFO_FullError  = (bool) ((res->VAL >> 7) & 1);
-	res->FIFO_Empty      = (bool) ((res->VAL >> 6) & 1);
-	res->Teletext        = (bool) ((res->VAL >> 5) & 1);
-	res->CC_Field1       = (bool) ((res->VAL >> 4) & 1);
-	res->CC_Field2       = (bool) ((res->VAL >> 3) & 1);
-	res->WSS             = (bool) ((res->VAL >> 2) & 1);
-	res->WSS             = (bool) ((res->VAL >> 1) & 1);
-	res->VITC            = (bool) (res->VAL & 1);
+	res->VAL            = TVP_Read(TVP_Addr_VDP_Status);
+	res->FIFO_FullError = (bool) ((res->VAL >> 7) & 1);
+	res->FIFO_Empty     = (bool) ((res->VAL >> 6) & 1);
+	res->Teletext       = (bool) ((res->VAL >> 5) & 1);
+	res->CC_Field1      = (bool) ((res->VAL >> 4) & 1);
+	res->CC_Field2      = (bool) ((res->VAL >> 3) & 1);
+	res->WSS            = (bool) ((res->VAL >> 2) & 1);
+	res->WSS            = (bool) ((res->VAL >> 1) & 1);
+	res->VITC           = (bool)  (res->VAL & 1);
 }
 
 void TVP_SetVDP_Conf(uint16_t addr, uint8_t data)
 {
 	uint8_t tmp = 0;
-	tmp = addr & 0xFF;
+	tmp =  addr & 0xFF;
 	TVP_Write(TVP_Addr_VDP_Conf_RAM_AddressLSB, tmp);
 	tmp = (addr >> 8) & 0x1;
 	TVP_Write(TVP_Addr_VDP_Conf_RAM_AddressMSB, tmp);
@@ -616,11 +620,11 @@ void TVP_SetVDP_Conf(uint16_t addr, uint8_t data)
 uint8_t TVP_GetVDP_Conf(uint16_t addr)
 {
 	uint8_t tmp = 0, res;
-	tmp = addr & 0xFF;
+	tmp =  addr & 0xFF;
 	TVP_Write(TVP_Addr_VDP_Conf_RAM_AddressLSB, tmp);
 	tmp = (addr >> 8) & 0x1;
 	TVP_Write(TVP_Addr_VDP_Conf_RAM_AddressMSB, tmp);
-	res             = TVP_Read(TVP_Addr_VDP_Conf_RAM_Data);
+	res = TVP_Read(TVP_Addr_VDP_Conf_RAM_Data);
 	return res;
 }
 
@@ -634,51 +638,161 @@ void TVP_SetInterruptA_Config(TVP_INTA_Conf_StructTypeDef *res)
 
 void TVP_GetInterruptA_Config(TVP_INTA_Conf_StructTypeDef *res)
 {
-	res->VAL          = TVP_Read(TVP_Addr_InterruptA_Config);
-	res->YUV          = (bool) ((res->VAL >> 2) & 1);
-	res->InterruptA   = (bool) ((res->VAL >> 1) & 1);
-	res->Polaryty     = (bool) (res->VAL & 1);
+	res->VAL         = TVP_Read(TVP_Addr_InterruptA_Config);
+	res->YUV         = (bool) ((res->VAL >> 2) & 1);
+	res->InterruptA  = (bool) ((res->VAL >> 1) & 1);
+	res->Polaryty    = (bool) (res->VAL & 1);
 }
 
 void TVP_SetInterruptA_Enable(TVP_INTA_StructTypeDef *res)
 {
 	uint8_t tmp;
-	//tmp = res->LockState * 0x80 + res->Lock * 0x40 + res->CycleComplete * 0x20 + res->BusError * 0x10 
 	tmp = res->Lock * 0x40 + res->CycleComplete * 0x20 + res->BusError * 0x10 
 	    + res->FIFO_Threshold * 4 + res->Line * 2 + res->Data;
-	TVP_Write(TVP_Addr_InterruptB_Enable, tmp);
+	TVP_Write(TVP_Addr_InterruptA_Enable, tmp);
 }
 
 void TVP_GetInterruptA_Enable(TVP_INTA_StructTypeDef *res)
 {
-	res->VAL              = TVP_Read(TVP_Addr_InterruptB_Enable);
-	res->Lock             = (bool) ((res->VAL >> 6) & 1);
-	res->CycleComplete    = (bool) ((res->VAL >> 5) & 1);
-	res->BusError         = (bool) ((res->VAL >> 4) & 1);
-	res->FIFO_Threshold   = (bool) ((res->VAL >> 2) & 1);
-	res->Line             = (bool) ((res->VAL >> 1) & 1);
-	res->Data             = (bool) (res->VAL & 1);
+	res->VAL            = TVP_Read(TVP_Addr_InterruptA_Enable);
+	res->Lock           = (bool) ((res->VAL >> 6) & 1);
+	res->CycleComplete  = (bool) ((res->VAL >> 5) & 1);
+	res->BusError       = (bool) ((res->VAL >> 4) & 1);
+	res->FIFO_Threshold = (bool) ((res->VAL >> 2) & 1);
+	res->Line           = (bool) ((res->VAL >> 1) & 1);
+	res->Data           = (bool)  (res->VAL & 1);
 }
-
 
 void TVP_SetInterruptA_Status(TVP_INTA_StructTypeDef *res)
 {
 	uint8_t tmp;
 	tmp = res->LockState * 0x80 + res->Lock * 0x40 + res->CycleComplete * 0x20 + res->BusError * 0x10 
 	    + res->FIFO_Threshold * 4 + res->Line * 2 + res->Data;
-	TVP_Write(TVP_Addr_InterruptB_Enable, tmp);
+	TVP_Write(TVP_Addr_InterruptA_Enable, tmp);
 }
 
 void TVP_GetInterruptA_Status(TVP_INTA_StructTypeDef *res)
 {
-	res->VAL              = TVP_Read(TVP_Addr_InterruptB_Enable);
-	res->LockState        = (bool) ((res->VAL >> 7) & 1);
-	res->Lock             = (bool) ((res->VAL >> 6) & 1);
-	res->CycleComplete    = (bool) ((res->VAL >> 5) & 1);
-	res->BusError         = (bool) ((res->VAL >> 4) & 1);
-	res->FIFO_Threshold   = (bool) ((res->VAL >> 2) & 1);
-	res->Line             = (bool) ((res->VAL >> 1) & 1);
-	res->Data             = (bool) (res->VAL & 1);
+	res->VAL            = TVP_Read(TVP_Addr_InterruptA_Enable);
+	res->LockState      = (bool) ((res->VAL >> 7) & 1);
+	res->Lock           = (bool) ((res->VAL >> 6) & 1);
+	res->CycleComplete  = (bool) ((res->VAL >> 5) & 1);
+	res->BusError       = (bool) ((res->VAL >> 4) & 1);
+	res->FIFO_Threshold = (bool) ((res->VAL >> 2) & 1);
+	res->Line           = (bool) ((res->VAL >> 1) & 1);
+	res->Data           = (bool)  (res->VAL & 1);
 }
 
+void TVP_SetLineMode(uint8_t line_num, TVP_LFM_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = res->NullFiltering * 0x80 + res->SendVBI * 0x40 + res->ErrorVBI * 0x20 + res->ErroCorrection * 0x10 
+	    + (res->Mode & 0x0f);
+	TVP_Write(TVP_Addr_LineModeStart + line_num, tmp);
+	
+}
+
+void TVP_GetLineMode(uint8_t line_num, TVP_LFM_StructTypeDef *res)
+{
+	res->VAL            = TVP_Read(TVP_Addr_LineModeStart + line_num);
+	res->NullFiltering  = (bool) ((res->VAL >> 7) & 1);
+	res->SendVBI        = (bool) ((res->VAL >> 6) & 1);
+	res->ErrorVBI       = (bool) ((res->VAL >> 5) & 1);
+	res->ErroCorrection = (bool) ((res->VAL >> 4) & 1);
+	res->Mode           = (TVP_LFM_TypeDef) (res->VAL & 0x0f);
+}
+
+void TVP_SetFieldMode(TVP_LFM_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = res->NullFiltering * 0x80 + res->SendVBI * 0x40 + res->ErrorVBI * 0x20 + res->ErroCorrection * 0x10 
+	    + (res->Mode & 0x0f);
+	TVP_Write(TVP_Addr_FullFieldMode, tmp);
+	
+}
+
+void TVP_GetFieldMode(TVP_LFM_StructTypeDef *res)
+{
+	res->VAL            = TVP_Read(TVP_Addr_FullFieldMode);
+	res->NullFiltering  = (bool) ((res->VAL >> 7) & 1);
+	res->SendVBI        = (bool) ((res->VAL >> 6) & 1);
+	res->ErrorVBI       = (bool) ((res->VAL >> 5) & 1);
+	res->ErroCorrection = (bool) ((res->VAL >> 4) & 1);
+	res->Mode           = (TVP_LFM_TypeDef) (res->VAL & 0x0f);
+}
+
+uint8_t TVP_GetWSS_Data(uint8_t num)
+{
+	uint8_t res;
+	if (num > 5) return 0;
+	res            = TVP_Read(TVP_Addr_WSS_Data1 + num);
+	return res;
+}
+
+uint8_t TVP_GetVPS_Data(uint8_t num)
+{
+	uint8_t res;
+	if (num > 11) return 0;
+	res            = TVP_Read(TVP_Addr_VPS_Data01 + num);
+	return res;
+}
+
+uint8_t TVP_GetVITC_Data(uint8_t num)
+{
+	uint8_t res;
+	if (num > 9) return 0;
+	res            = TVP_Read(TVP_Addr_VITC_Data01 + num);
+	return res;
+}
+
+uint8_t TVP_GetClosedCapture_Data(uint8_t num)
+{
+	uint8_t res;
+	if (num > 3) return 0;
+	res            = TVP_Read(TVP_Addr_ClosedCaptionData1 + num);
+	return res;
+}
+
+uint8_t TVP_GetVBI_FIFO_Data()
+{
+	uint8_t res;
+	res            = TVP_Read(TVP_Addr_VBI_FIFO);
+	return res;
+}
+
+void TVP_SetTeletextFilter(uint8_t num, uint8_t res)
+{
+	if (num > 9) return;
+	
+	TVP_Write(TVP_Addr_LineModeStart + num, res);
+	
+}
+
+uint8_t TVP_GetTeletextFilter(uint8_t num)
+{
+	uint8_t res;
+	if (num > 9) return 0;
+	res            = TVP_Read(TVP_Addr_LineModeStart + num);
+	return res;
+}
+
+void TVP_SetTeletextFilterControl(TVP_TTC_StructTypeDef *res)
+{
+	uint8_t tmp = 0;
+	
+	tmp = res->FilterLogic * 8 + res->Mode * 4 + res->TeletextFilter2 * 2 + res->TeletextFilter1;
+	TVP_Write(TVP_Addr_TeletextFilterControl, tmp);
+	
+}
+
+void TVP_GetTeletextFilterControl(TVP_TTC_StructTypeDef *res)
+{
+	res->VAL             = TVP_Read(TVP_Addr_TeletextFilterControl);
+	res->FilterLogic     = (TVP_TTC_TypeDef) ((res->VAL >> 3) & 3);
+	res->Mode            = (bool) ((res->VAL >> 2) & 1);
+	res->TeletextFilter2 = (bool) ((res->VAL >> 1) & 1);
+	res->TeletextFilter1 = (bool)  (res->VAL & 1);
+}
 
