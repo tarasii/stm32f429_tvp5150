@@ -49,21 +49,58 @@ typedef struct
 
 typedef struct
 {
+	bool AutoInitialize;
+	bool AutoClock;
+	uint8_t VAL;
+}TVP_AI_StructTypeDef; //Automatic Initialization
+
+typedef struct
+{
+	bool Field1;
+	bool Field2;
+	uint8_t LineNumber;
+	uint8_t VAL;
+}TVP_LNI_StructTypeDef; //Line Number Interrupt
+
+typedef struct
+{
 	uint16_t DeviceId;
 	uint8_t ROM;
 	uint8_t RAM;
 	uint16_t VerticalLineCount;
 }TVP_Info_StructTypeDef; //Info structure
 
+typedef enum
+{
+  TVP_NoCopyProtection      = 0x00,  /*!<No copy protection                                        */
+  TVP_AGC_PseudoSyncs       = 0x01,  /*!<AGC pulses/pseudo-syncs present                           */
+  TVP_LPG_PseudoSyncs_2     = 0x02,  /*!<AGC pulses/pseudo-syncs and 2-line color striping present */
+  TVP_LPG_PseudoSyncs_4     = 0x03,  /*!<AGC pulses/pseudo-syncs and 4-line color striping present */
+}TVP_MD_TypeDef; //Macrovision detection
+
 typedef struct
 {
-	uint8_t r1;
-	uint8_t r2;
+	bool PeakWhiteDetect;     //Peak white detect status: 0 - is not detected; 1 - Peak white is detected.
+	bool LineAlternating;     //Line-alternating status: 0 - nonline alternating; 1 - line alternating
+	bool FieldRate;           //Field rate status: 0 - 60 Hz; 1 - 50 Hz
+	bool LostLock;            //Lost lock detect: 0 - No lost lock since status register #1 was last read; 1 - Lost lock since status register #1 was last read.
+	bool ColorSubcarrierLock; //Color subcarrier lock status: 0 - is not locked; 1 - is locked
+	bool VerticalSyncLock;    //Vertical sync lock: 0 - is not locked; 1 - is locked
+	bool HorizontalSyncLock;  //Horizontal sync lock: 0 - is not locked; 1 - is locked.
+	bool TV_VCR;              //0 - TV;1 - VCR
+	uint8_t VAL1;
+	bool WeakSignalDetection; //Weak signal detection: 0 - No weak signal; 1 - Weak signal mode
+	bool PAL_SwitchPolarity;  //PAL switch polarity of first line of odd field: 0 - PAL switch is 0; 1 - PAL switch is 1
+	bool FieldSequence;       //Field sequence status: 0 - Even field; 1 - Odd field
+	bool AGC_AndOffsetFrozen; //AGC and offset frozen status: 0 - AGC and offset are not frozen; 1 - AGC and offset are frozen.
+	TVP_MD_TypeDef MacrovisionDetection; //Macrovision detection
+	uint8_t VAL2;
 	uint8_t AGC;
 	uint8_t SCH;
-	uint8_t r5;
-	uint8_t int_r1;
-	uint8_t int_r2;
+	bool AutoswitchMode;      //Autoswitch mode: 0 - Stand-alone (forced video standard) mode; 1 - Autoswitch mode
+	TVP_VS_TypeDef VideoStandard;
+	bool SamplingRate;        //Sampling rate (SR): 0 - Reserved; 1 - ITU-R BT.601
+	uint8_t VAL3;
 }TVP_Status_StructTypeDef; //Status structure
 
 typedef enum
@@ -276,79 +313,126 @@ typedef struct
 	uint8_t VAL2;
 }TVP_CC_StructTypeDef; //Chrominance Control structure
 
+typedef struct
+{
+	bool SoftwareInitialization;            
+	bool MacrovisionDetect;          
+	bool CommandReady;
+	bool FieldRate;
+	bool LineAlternation;       
+	bool ColorLock;
+	bool HV_Lock;
+	bool TV_VCR;	
+	uint8_t VAL;
+}TVP_INTB_StructTypeDef; //Interrupt Register B structure
+
+typedef struct
+{
+	bool YUV;            
+	bool InterruptA;          
+	bool Polaryty;
+	uint8_t VAL;
+}TVP_INTA_Conf_StructTypeDef; //Interrupt Register A structure
+
+typedef struct
+{
+	bool LockState;            
+	bool Lock;          
+	bool CycleComplete;
+	bool BusError;
+	bool FIFO_Threshold;       
+	bool Line;
+	bool Data;	
+	uint8_t VAL;
+}TVP_INTA_StructTypeDef; //Interrupt Register A structure
+
+
+typedef struct
+{
+	bool FIFO_FullError;            
+	bool FIFO_Empty;          
+	bool Teletext;
+	bool CC_Field1;
+	bool CC_Field2;       
+	bool WSS;
+	bool WPS;
+	bool VITC;	
+	uint8_t VAL;
+}TVP_VDP_StructTypeDef; //VDP Status structure
+
 #define		TVP_WRITE_ADDRESS 0xB8 //I2CSEL = 0
 //#define	TVP_WRITE_ADDRESS 0xBA //I2CSEL = 1
 #define		TVP_READ_ADDRESS 0xB9 //I2CSEL = 0
 //#define	TVP_READ_ADDRESS 0xBB //I2CSEL = 1
 
-#define TVP_Addr_InputSource 0x0					 //*
-#define TVP_Addr_AnalogChannelControls 0x1 //*
-#define TVP_Addr_OperatingModeControls 0x2 //*
-#define TVP_Addr_MiscellaneousControls 0x3 //*
-#define TVP_Addr_AutoswitchMask 0x4        //*
-#define TVP_Addr_SoftwareReset 0x5         //*
-#define TVP_Addr_ColorKillerControl 0x6    //*
-#define TVP_Addr_LuminanceControl1 0x7     //*
-#define TVP_Addr_LuminanceControl2 0x8     //*
-#define TVP_Addr_BrightnessControl 0x9     //*
-#define TVP_Addr_SaturationControl 0x0A    //*
-#define TVP_Addr_HueControl 0x0B           //*
-#define TVP_Addr_ContrastControl 0x0C      //*
-#define TVP_Addr_OutputAndRatesSelect 0x0D //*
-#define TVP_Addr_LuminanceControl3 0x0E    //*
-#define TVP_Addr_PinsConfig 0x0F           //*
+#define TVP_Addr_InputSource                0x00	//*
+#define TVP_Addr_AnalogChannelControls      0x01 //*
+#define TVP_Addr_OperatingModeControls      0x02 //*
+#define TVP_Addr_MiscellaneousControls      0x03 //*
+#define TVP_Addr_AutoswitchMask             0x04 //*
+#define TVP_Addr_SoftwareReset              0x05 //*
+#define TVP_Addr_ColorKillerControl         0x06 //*
+#define TVP_Addr_LuminanceControl1          0x07 //*
+#define TVP_Addr_LuminanceControl2          0x08 //*
+#define TVP_Addr_BrightnessControl          0x09 //*
+#define TVP_Addr_SaturationControl          0x0A //*
+#define TVP_Addr_HueControl                 0x0B //*
+#define TVP_Addr_ContrastControl            0x0C //*
+#define TVP_Addr_OutputAndRatesSelect       0x0D //*
+#define TVP_Addr_LuminanceControl3          0x0E //*
+#define TVP_Addr_PinsConfig                 0x0F //*
 #define TVP_Addr_ActiveVideoCropingStartMSB 0x11 //*
 #define TVP_Addr_ActiveVideoCropingStartLSB 0x12 //*
-#define TVP_Addr_ActiveVideoCropingStopMSB 0x13  //*
-#define TVP_Addr_ActiveVideoCropingStopLSB 0x14  //*
-#define TVP_Addr_Genlock 0x15                    //*
-#define TVP_Addr_HorisontalSynkStart 0x16        //*
-#define TVP_Addr_VerticalBlankingStart 0x18      //*
-#define TVP_Addr_VerticalBlankingStop 0x19       //*
-#define TVP_Addr_CrominanceControl1 0x1A         //*
-#define TVP_Addr_CrominanceControl2 0x1B         //*
-#define TVP_Addr_InterruptResetRegisterB 0x1C
-#define TVP_Addr_InterruptEnableRegisterB 0x1D
-#define TVP_Addr_InterruptConfigRegisterB 0x1E
-#define TVP_Addr_VideoStandart 0x28        //*
+#define TVP_Addr_ActiveVideoCropingStopMSB  0x13 //*
+#define TVP_Addr_ActiveVideoCropingStopLSB  0x14 //*
+#define TVP_Addr_Genlock                    0x15 //*
+#define TVP_Addr_HorisontalSynkStart        0x16 //*
+#define TVP_Addr_VerticalBlankingStart      0x18 //*
+#define TVP_Addr_VerticalBlankingStop       0x19 //*
+#define TVP_Addr_CrominanceControl1         0x1A //*
+#define TVP_Addr_CrominanceControl2         0x1B //*
+#define TVP_Addr_InterruptB_Reset           0x1C //*
+#define TVP_Addr_InterruptB_Enable          0x1D //*
+#define TVP_Addr_InterruptB_Config          0x1E //*
+#define TVP_Addr_VideoStandart              0x28 //*
 
-#define TVP_Addr_DeviceMSB 0x80            //*//Only read
-#define TVP_Addr_DeviceLSB 0x81            //*
-#define TVP_Addr_ROMVersion 0x82           //*
-#define TVP_Addr_RAMVersion 0x83 					 //*
-#define TVP_Addr_VerticalLineCountMSB 0x84 //*
-#define TVP_Addr_VerticalLineCountLSB 0x85 //*
+#define TVP_Addr_DeviceMSB                  0x80 //* //Only read
+#define TVP_Addr_DeviceLSB                  0x81 //*
+#define TVP_Addr_ROMVersion                 0x82 //*
+#define TVP_Addr_RAMVersion                 0x83 //*
+#define TVP_Addr_VerticalLineCountMSB       0x84 //*
+#define TVP_Addr_VerticalLineCountLSB       0x85 //*
 
-#define TVP_Addr_InterruptStatusRegisterB 0x86
-#define TVP_Addr_InterruptActiveRegisterB 0x87
-#define TVP_Addr_StatusRegister1 0x88
-#define TVP_Addr_StatusRegister2 0x89
-#define TVP_Addr_StatusRegister3 0x8A      //*
-#define TVP_Addr_StatusRegister4 0x8B      //*
-#define TVP_Addr_StatusRegister5 0x8C
+#define TVP_Addr_InterruptB_Status          0x86 //*
+#define TVP_Addr_InterruptB_Active          0x87 //*
+#define TVP_Addr_StatusRegister1            0x88 //*
+#define TVP_Addr_StatusRegister2            0x89 //*
+#define TVP_Addr_StatusRegister3            0x8A //*
+#define TVP_Addr_StatusRegister4            0x8B //*
+#define TVP_Addr_StatusRegister5            0x8C //*
 
 #define TVP_Addr_ClosedCaptionData1 0x90
 #define TVP_Addr_ClosedCaptionData2 0x91
 #define TVP_Addr_ClosedCaptionData3 0x92
 #define TVP_Addr_ClosedCaptionData4 0x93
-#define TVP_Addr_WSS_Data1 0x94
-#define TVP_Addr_WSS_Data2 0x95
-#define TVP_Addr_WSS_Data3 0x96
-#define TVP_Addr_WSS_Data4 0x97
-#define TVP_Addr_WSS_Data5 0x98
-#define TVP_Addr_WSS_Data6 0x99
-#define TVP_Addr_VPS_Data01 0x9A
-#define TVP_Addr_VPS_Data02 0x9B
-#define TVP_Addr_VPS_Data03 0x9C
-#define TVP_Addr_VPS_Data04 0x9D
-#define TVP_Addr_VPS_Data05 0x9E
-#define TVP_Addr_VPS_Data06 0x9F
-#define TVP_Addr_VPS_Data07 0x0A1
-#define TVP_Addr_VPS_Data08 0x0A2
-#define TVP_Addr_VPS_Data09 0x0A3
-#define TVP_Addr_VPS_Data10 0x0A4
-#define TVP_Addr_VPS_Data11 0x0A5
-#define TVP_Addr_VPS_Data12 0x0A6
+#define TVP_Addr_WSS_Data1   0x094
+#define TVP_Addr_WSS_Data2   0x095
+#define TVP_Addr_WSS_Data3   0x096
+#define TVP_Addr_WSS_Data4   0x097
+#define TVP_Addr_WSS_Data5   0x098
+#define TVP_Addr_WSS_Data6   0x099
+#define TVP_Addr_VPS_Data01  0x09A
+#define TVP_Addr_VPS_Data02  0x09B
+#define TVP_Addr_VPS_Data03  0x09C
+#define TVP_Addr_VPS_Data04  0x09D
+#define TVP_Addr_VPS_Data05  0x09E
+#define TVP_Addr_VPS_Data06  0x09F
+#define TVP_Addr_VPS_Data07  0x0A1
+#define TVP_Addr_VPS_Data08  0x0A2
+#define TVP_Addr_VPS_Data09  0x0A3
+#define TVP_Addr_VPS_Data10  0x0A4
+#define TVP_Addr_VPS_Data11  0x0A5
+#define TVP_Addr_VPS_Data12  0x0A6
 #define TVP_Addr_VITC_Data01 0x0A7
 #define TVP_Addr_VITC_Data02 0x0A8
 #define TVP_Addr_VITC_Data03 0x0A9
@@ -359,18 +443,41 @@ typedef struct
 #define TVP_Addr_VITC_Data08 0x0AD
 #define TVP_Addr_VITC_Data09 0x0AE
 #define TVP_Addr_VITC_Data10 0x0AF
-#define TVP_Addr_VBI_FIFO 0x0B0
+#define TVP_Addr_VBI_FIFO    0x0B0
 
-#define TVP_Addr_TeletextFilet11 0x0B1  //read write
-#define TVP_Addr_TeletextFilet12 0x0B2
-#define TVP_Addr_TeletextFilet13 0x0B3
-#define TVP_Addr_TeletextFilet14 0x0B4
-#define TVP_Addr_TeletextFilet15 0x0B5
-#define TVP_Addr_TeletextFilet21 0x0B6
-#define TVP_Addr_TeletextFilet22 0x0B7
-#define TVP_Addr_TeletextFilet23 0x0B8
-#define TVP_Addr_TeletextFilet24 0x0B9
-#define TVP_Addr_TeletextFilet25 0x0BA
+#define TVP_Addr_TeletextFilter11     0x0B1  //read write
+#define TVP_Addr_TeletextFilter12     0x0B2
+#define TVP_Addr_TeletextFilter13     0x0B3
+#define TVP_Addr_TeletextFilter14     0x0B4
+#define TVP_Addr_TeletextFilter15     0x0B5
+#define TVP_Addr_TeletextFilter21     0x0B6
+#define TVP_Addr_TeletextFilter22     0x0B7
+#define TVP_Addr_TeletextFilter23     0x0B8
+#define TVP_Addr_TeletextFilter24     0x0B9
+#define TVP_Addr_TeletextFilter25     0x0BA
+#define TVP_Addr_TeletextFilterEnable 0x0BB
+
+#define TVP_Addr_InterruptA_Status    0x0C0 //*
+#define TVP_Addr_InterruptA_Enable    0x0C1 //* 
+#define TVP_Addr_InterruptA_Config    0x0C2 //*  
+
+#define TVP_Addr_VDP_Conf_RAM_Data       0x0C3 //*
+#define TVP_Addr_VDP_Conf_RAM_AddressLSB 0x0C4 //*
+#define TVP_Addr_VDP_Conf_RAM_AddressMSB 0x0C5 //*
+#define TVP_Addr_VDP_Status              0x0C6 //*
+#define TVP_Addr_FIFO_WordCount          0x0C7 //*
+#define TVP_Addr_FIFO_InterruptThreshold 0x0C8 //*
+#define TVP_Addr_FIFO_Reset              0x0C9 //*
+#define TVP_Addr_LineNumberInterrupt     0x0CA //*
+#define TVP_Addr_PixelAlignmentLSB       0x0CB //*
+#define TVP_Addr_PixelAlignmentMSB       0x0CC //*
+#define TVP_Addr_FIFO_OutputControl      0x0CD //*
+#define TVP_Addr_AutomaticInitialization 0x0CE //*
+#define TVP_Addr_FullFieldEnable         0x0CF //*
+#define TVP_Addr_LineModeRegisterStart   0x0D0
+#define TVP_Addr_LineModeRegisterEnd     0x0FB
+#define TVP_Addr_FullFieldModeRegister   0x0FC
+
 
 void TVP_Init(void);
 
@@ -430,8 +537,47 @@ void TVP_GetChrominanceControl(TVP_CC_StructTypeDef *res);
 void TVP_SetVideoStandart(TVP_VS_TypeDef VideoStandart);
 TVP_VS_TypeDef TVP_GetVideoStandart(void);
 
+void TVP_SetInterruptB_Reset(TVP_INTB_StructTypeDef *res);
+void TVP_GetInterruptB_Reset(TVP_INTB_StructTypeDef *res);
+void TVP_SetInterruptB_Enable(TVP_INTB_StructTypeDef *res);
+void TVP_GetInterruptB_Enable(TVP_INTB_StructTypeDef *res);
+void TVP_SetInterruptB_Polarity(bool res);
+bool TVP_GetInterruptB_Polarity(void);
+void TVP_GetInterruptB_Status(TVP_INTB_StructTypeDef *res);
+bool TVP_GetInterruptB_Active(void);
+
 void TVP_GetInfo(TVP_Info_StructTypeDef *res);
 void TVP_GetStatus(TVP_Status_StructTypeDef *res);
+
+void TVP_SetFullFieldEnabled(bool res);
+bool TVP_GetFullFieldEnabled(void);
+uint8_t TVP_GetFIFO_WordCount(void);
+void TVP_SetFIFO_InterruptThreshold(uint8_t res);
+uint8_t TVP_GetFIFO_InterruptThreshold(void);
+void TVP_FIFO_Reset(uint8_t res);
+void TVP_SetFIFO_OutputControl(bool res);
+bool TVP_GetFIFO_OutputControl(void);
+
+void TVP_SetAutomaticInitialization(bool auto_initialize, bool auto_clock);
+void TVP_GetAutomaticInitialization(TVP_AI_StructTypeDef *res);
+
+void TVP_SetPixelAlignment(uint16_t addr);
+uint16_t TVP_GetPixelAlignment(void);
+
+void TVP_SetLineNumberInterrupt(bool field1, bool field2, uint8_t line_num);
+void TVP_GetLineNumberInterrupt(TVP_LNI_StructTypeDef *res);
+
+void TVP_SetVDP_Conf(uint16_t addr, uint8_t data);
+uint8_t TVP_GetVDP_Conf(uint16_t addr);
+void TVP_SetVDPStatus(TVP_VDP_StructTypeDef *res);
+void TVP_GetVDPStatus(TVP_VDP_StructTypeDef *res);
+
+void TVP_SetInterruptA_Config(TVP_INTA_Conf_StructTypeDef *res);
+void TVP_GetInterruptA_Config(TVP_INTA_Conf_StructTypeDef *res);
+void TVP_SetInterruptA_Enable(TVP_INTA_StructTypeDef *res);
+void TVP_GetInterruptA_Enable(TVP_INTA_StructTypeDef *res);
+void TVP_SetInterruptA_Status(TVP_INTA_StructTypeDef *res);
+void TVP_GetInterruptA_Status(TVP_INTA_StructTypeDef *res);
 
 #endif /*__ tvp5150_H */
 
