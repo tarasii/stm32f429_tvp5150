@@ -486,6 +486,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\tvp5150.c</FilePath>
             </File>
+            <File>
+              <FileName>svga050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\svga050.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

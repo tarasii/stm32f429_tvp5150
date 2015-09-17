@@ -3,12 +3,9 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-//#include "stm32f4xx_hal_i2c.h"
 #include "i2c.h"
 
-//#define AIP1A 0
-//#define AIP1B 2
-//#define AIP_S 1
+
 typedef enum
 {
   TVP_CS_AIP1A             = 0x00,  /*!< Composite AIP1A    */
@@ -408,8 +405,8 @@ typedef struct
 
 #define		TVP_WRITE_ADDRESS 0xB8 //I2CSEL = 0
 //#define	TVP_WRITE_ADDRESS 0xBA //I2CSEL = 1
-#define		TVP_READ_ADDRESS 0xB9 //I2CSEL = 0
-//#define	TVP_READ_ADDRESS 0xBB //I2CSEL = 1
+#define		TVP_READ_ADDRESS 0xB9  //I2CSEL = 0
+//#define	TVP_READ_ADDRESS 0xBB  //I2CSEL = 1
 
 #define TVP_Addr_InputSource                0x00 //*
 #define TVP_Addr_AnalogChannelControls      0x01 //*
