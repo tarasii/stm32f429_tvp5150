@@ -174,9 +174,9 @@ uint8_t SVGA_GetVerticalBlankLines(void);
 void SVGA_SetVerticalBlankLines(uint8_t v_blank);
 uint8_t SVGA_GetHorizontalBlankPixels(void);
 void SVGA_SetHorizontalBlankPixels(uint8_t h_blank);
-SVGA_SVP_TypeDef SVGA_GetStartActiveVideoPosition();
+SVGA_SVP_TypeDef SVGA_GetStartActiveVideoPosition(void);
 void SVGA_SetStartActiveVideoPosition(SVGA_SVP_TypeDef v_offset);
-SVGA_SLP_TypeDef SVGA_GetFieldStartLinePosition();
+SVGA_SLP_TypeDef SVGA_GetFieldStartLinePosition(void);
 void SVGA_SetFieldStartLinePosition(SVGA_SLP_TypeDef h_offset);
 
 void SVGA_GetDownScaling(SVGA_DS_StructTypeDef *res);
@@ -209,7 +209,7 @@ void SVGA_SetDischargeCurrent(SVGA_DCS_TypeDef val);
 bool SVGA_GetDischargeEnabled(void);
 void SVGA_SetDischargeEnabled(bool val);
 
-uint8_t SVGA_GetVcomLevel();
+uint8_t SVGA_GetVcomLevel(void);
 void SVGA_SetVcomLevel(uint8_t val);
 float SVGA_GetTemperatureSensor(void);
 uint16_t SVGA_GetGammaCorrection(uint8_t num);

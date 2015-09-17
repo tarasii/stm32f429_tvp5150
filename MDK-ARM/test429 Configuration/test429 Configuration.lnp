@@ -12,6 +12,7 @@
 "test429 configuration\dcmi.o"
 "test429 configuration\stm32f4xx_it.o"
 "test429 configuration\tvp5150.o"
+"test429 configuration\svga050.o"
 "test429 configuration\stm32f4xx_hal_ltdc_ex.o"
 "test429 configuration\stm32f4xx_hal_flash.o"
 "test429 configuration\stm32f4xx_hal_adc_ex.o"
