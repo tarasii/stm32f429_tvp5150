@@ -1,5 +1,15 @@
 #include "svga050.h"
 
+void SVGA_Init()
+{
+	SVGA_SetDisplayOff(0,0,0);
+  SVGA_SetVcomLevel(0x80);
+	//test field
+	SVGA_SetTestPattern(SVGA_TP_Chess, 20, 20, SVGA_TPC_Black, SVGA_TPC_White);
+	
+}
+
+
 void SVGA_Write(uint8_t addr, uint8_t data)
 {
 	uint8_t i2cbuf[2];
@@ -284,11 +294,40 @@ void SVGA_SetVcomLevel(uint8_t val)
 	SVGA_Write(SVGA_Addr_VcomLevelSetting, val);
 }
 
-float SVGA_GetTemperatureSensor()
+uint8_t SVGA_GetTemperatureSensor()
 {
 	uint8_t res;
 	res = SVGA_Read(SVGA_Addr_TemperatureSensorReadout);
-	return 0.47 * res  - 40;
+	return res;
+}
+
+float SVGA_CalculateTemperature(uint8_t raw_temp)
+{
+	float res;
+	res = 0.47 * raw_temp  - 40;
+	return res;
+}
+
+void SVGA_SetTemperatureLuminanceCompensation()
+{
+	uint8_t val;
+	uint8_t res;
+	int8_t delta[120] = {-86, -85, -84, -83, -82, -81, -80, -79, -78, -77,
+	                     -76, -75, -74, -72, -71, -70, -69, -68, -66, -65,
+	                     -64, -62, -61, -60, -58, -57, -56, -54, -53, -51,
+                     	 -50, -49, -47, -46, -44, -43, -41, -40, -38, -37,
+	                     -35, -34, -32, -31, -29, -28, -26, -25, -23, -22,
+	                     -20, -19, -17, -16, -14, -13, -11, -10, - 8, - 7,
+	                     - 5, - 4, - 2, - 1,   1,   2,   3,   5,   6,   8,
+	                       9,  11,  12,  13,  15,  16,  17,  19,  20,  21, 
+		                    23,  24,  25,  26,  28,  29,  30,  31,  32,  34,
+	                      35,  36,  37,  38,  39,  40,  41,  42,  43,  44,
+	                      45,  46,  47,  47,  48,  49,  50,  50,  51,  52,
+	                      52,  53,  54,  55,  55,  56,  56,  56,  57,  57};
+	val = SVGA_GetTemperatureSensor() / 2;
+  res = SVGA_Default_VCOM_Level + delta[val];
+  if (res < 0x20) return;
+	SVGA_SetVcomLevel(res);
 }
 
 uint16_t SVGA_GetGammaCorrection(uint8_t num)
@@ -382,5 +421,31 @@ void SVGA_SetRGB_SignalOffset(uint16_t red, uint16_t green, uint16_t blue)
 	SVGA_Write(SVGA_Addr_BlueSignalOffset_MSB, tmp);
 }
 
+
+void SVGA_GetTestPattern(SVGA_TP_StructTypeDef *res)
+{
+	uint8_t tmp;
+	tmp = SVGA_Read(SVGA_Addr_TestPatternModeSelection);
+	res->TestPattern = (SVGA_TPC_TypeDef) tmp;
+	res->LineWidth   = SVGA_Read(SVGA_Addr_TestPatternLineWidthSetting);
+	res->LineSpace   = SVGA_Read(SVGA_Addr_TestPatternLineSpaceSetting);
+	tmp = SVGA_Read(SVGA_Addr_TestPatternColorSetting);
+	res->BackColor   = (SVGA_TPC_TypeDef) ((tmp >> 4 ) & 7) ;
+	res->ForeColor   = (SVGA_TPC_TypeDef)  (tmp & 7);
+}
+
+void SVGA_SetTestPattern(SVGA_TP_TypeDef pal, uint8_t line_width, uint8_t line_space, SVGA_TPC_TypeDef back_color, SVGA_TPC_TypeDef fore_color)
+{
+	uint8_t tmp;
+	tmp = pal & 0x07;
+	SVGA_Write(SVGA_Addr_TestPatternModeSelection, tmp);
+	if ((pal == SVGA_TP_VerticalLines) || (pal == SVGA_TP_HorizontalLines) || (pal == SVGA_TP_Chess))
+	{
+	  SVGA_Write(SVGA_Addr_TestPatternLineWidthSetting, line_width);
+	  SVGA_Write(SVGA_Addr_TestPatternLineSpaceSetting, line_space);
+	  tmp = back_color * 0x10 + fore_color;
+	  SVGA_Write(SVGA_Addr_TestPatternColorSetting, tmp);
+	}
+}
 
 

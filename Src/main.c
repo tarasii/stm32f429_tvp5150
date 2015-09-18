@@ -41,6 +41,7 @@
 #include "gpio.h"
 #include "fmc.h"
 #include "tvp5150.h"
+#include "svga050.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -92,6 +93,7 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 	TVP_Init();
+	SVGA_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

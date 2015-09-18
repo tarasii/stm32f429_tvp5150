@@ -101,6 +101,36 @@ typedef enum
   SVGA_DCS_1   = 0x02  /*!< 1 nA       */
 }SVGA_DCS_TypeDef ; // 
 
+typedef enum
+{
+  SVGA_TP_OFF             = 0x00, /*!< Pattern Generator Off (Normal) */
+  SVGA_TP_ColorBar        = 0x01, /*!< Color Bar                      */
+  SVGA_TP_GrayScale       = 0x02, /*!< Gray Scale                     */
+  SVGA_TP_Tile            = 0x03, /*!< Tile                           */
+  SVGA_TP_VerticalLines   = 0x04, /*!< Vertical Lines                 */
+  SVGA_TP_HorizontalLines = 0x05, /*!< Horizontal Lines               */
+  SVGA_TP_Chess           = 0x06  /*!< Ver. & Hor. Lines              */
+}SVGA_TP_TypeDef ; // Test Pattern
+
+typedef enum
+{
+  SVGA_TPC_Black = 0x00, /*!< Black */
+  SVGA_TPC_Blue  = 0x01, /*!< Blue  */
+  SVGA_TPC_Green = 0x02, /*!< Green */
+  SVGA_TPC_Red   = 0x04, /*!< Red   */
+  SVGA_TPC_White = 0x07  /*!< White */
+}SVGA_TPC_TypeDef ; // 
+
+typedef struct
+{
+	SVGA_TPC_TypeDef TestPattern; //
+	SVGA_TPC_TypeDef BackColor;   //
+	SVGA_TPC_TypeDef ForeColor;   //
+	uint8_t LineWidth;
+	uint8_t LineSpace;
+	uint8_t VAL1;
+	uint8_t VAL2;
+}SVGA_TP_StructTypeDef; // Test Pattern structure
 
 //typedef enum
 //{
@@ -123,6 +153,8 @@ typedef enum
 //#define	TVP_READ_ADDRESS 0x1D  //SELADR0 = 0
 #define	  SVGA_READ_ADDRESS 0x1F  //SELADR0 = 1
 
+#define SVGA_Default_VCOM_Level 0x1B
+
 #define SVGA_Addr_RevisionInformation            0x00 //
 //Video Related Registers
 #define SVGA_Addr_InputVideoTypeSet              0x01 //
@@ -144,27 +176,30 @@ typedef enum
 #define SVGA_Addr_DA_OffsetSetting               0x16 //
 #define SVGA_Addr_DischargeCurrentSetting        0x17 //
 #define SVGA_Addr_DischargeEnabledControl        0x18 //
-#define SVGA_Addr_VcomLevelSetting               0x19 //*
+#define SVGA_Addr_VcomLevelSetting               0x19 //
 //Temperature Sensor Register
-#define SVGA_Addr_TemperatureSensorReadout       0x1D //*
+#define SVGA_Addr_TemperatureSensorReadout       0x1D //
 //Gamma Look-Up Table Registers
-#define SVGA_Addr_GammaCorrectionLUT0_LSB        0x20 //*
-#define SVGA_Addr_GammaCorrectionLUT0_MSB        0x21 //*
+#define SVGA_Addr_GammaCorrectionLUT0_LSB        0x20 //
+#define SVGA_Addr_GammaCorrectionLUT0_MSB        0x21 //
 //Color Offset Control Registers
-#define SVGA_Addr_RedSignalOffset_LSB            0x44 //*
-#define SVGA_Addr_RedSignalOffset_MSB            0x45 //*
-#define SVGA_Addr_GreenSignalOffset_LSB          0x46 //*
-#define SVGA_Addr_GreenSignalOffset_MSB          0x47 //*
-#define SVGA_Addr_BlueSignalOffset_LSB           0x48 //*
-#define SVGA_Addr_BlueSignalOffset_MSB           0x49 //*
+#define SVGA_Addr_RedSignalOffset_LSB            0x44 //
+#define SVGA_Addr_RedSignalOffset_MSB            0x45 //
+#define SVGA_Addr_GreenSignalOffset_LSB          0x46 //
+#define SVGA_Addr_GreenSignalOffset_MSB          0x47 //
+#define SVGA_Addr_BlueSignalOffset_LSB           0x48 //
+#define SVGA_Addr_BlueSignalOffset_MSB           0x49 //
 //Test Pattern Generator Control Register
 #define SVGA_Addr_TestPatternModeSelection       0x4A //*
 #define SVGA_Addr_TestPatternLineWidthSetting    0x4B //*
 #define SVGA_Addr_TestPatternLineSpaceSetting    0x4C //*
 #define SVGA_Addr_TestPatternColorSetting        0x4D //*
 
+void SVGA_Init(void);
+
 void SVGA_Write(uint8_t addr, uint8_t data);
 uint8_t SVGA_Read(uint8_t addr);
+
 uint8_t SVGA_GetChipRev(void);
 void SVGA_GetInputVideoTypeSet(SVGA_SCM_StructTypeDef *res);
 void SVGA_SetInputVideoType(SVGA_SM_TypeDef signal_mode, SVGA_SSM_TypeDef sync_signal, SVGA_SCM_TypeDef scan_mode);
@@ -191,6 +226,9 @@ void SVGA_SetDisplayConfig(uint8_t brightness, uint8_t contrast);
 void SVGA_GetPowerDown(SVGA_PD_StructTypeDef *res);
 void SVGA_SetPowerDown(bool PDOWN, bool BSGENPD, bool RDACPD, bool RAMPPD, bool VCOMPD, bool TSENPD);
 
+void SVGA_GetDisplayOff(SVGA_DO_StructTypeDef *res);
+void SVGA_SetDisplayOff(bool DispOff, bool VSCAN, bool HSCAN);
+
 uint8_t SVGA_GetLeftMargin(void);
 void SVGA_SetLeftMargin(uint8_t val);
 uint8_t SVGA_GetRightMargin(void);
@@ -211,7 +249,11 @@ void SVGA_SetDischargeEnabled(bool val);
 
 uint8_t SVGA_GetVcomLevel(void);
 void SVGA_SetVcomLevel(uint8_t val);
-float SVGA_GetTemperatureSensor(void);
+uint8_t SVGA_GetTemperatureSensor(void);
+float SVGA_CalculateTemperature(uint8_t raw_temp);
+void SVGA_SetTemperatureLuminanceCompensation(void);
+
+
 uint16_t SVGA_GetGammaCorrection(uint8_t num);
 void SVGA_SetGammaCorrection(uint8_t num, uint16_t val);
 uint16_t SVGA_GetRedSignalOffset(void);
@@ -221,6 +263,9 @@ void SVGA_SetGreenSignalOffset(uint16_t val);
 uint16_t SVGA_GetBlueSignalOffset(void);
 void SVGA_SetBlueSignalOffset(uint16_t val);
 void SVGA_SetRGB_SignalOffset(uint16_t red, uint16_t green, uint16_t blue);
+
+void SVGA_GetTestPattern(SVGA_TP_StructTypeDef *res);
+void SVGA_SetTestPattern(SVGA_TP_TypeDef pal, uint8_t line_width, uint8_t line_space, SVGA_TPC_TypeDef back_color, SVGA_TPC_TypeDef fore_color);
 
 
 #endif /*__ svga050_H */
