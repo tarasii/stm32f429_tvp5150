@@ -5,7 +5,7 @@ void TVP_Init()
 {
 	TVP_Pins_StructTypeDef tpins;
 	TVP_IC_StructTypeDef tcfg;
-	//TVP_OAR_StructTypeDef tvidfrmt;
+	TVP_OAR_StructTypeDef tvidfrmt;
 	
 	//TVP_Write(TVP_Addr_InputSource, 0);
 	TVP_SetInputSource(TVP_CS_AIP1A); //Same sheet
@@ -19,10 +19,9 @@ void TVP_Init()
 	TVP_InitImageConfig(&tcfg);
 	TVP_SetImageConfig(&tcfg);
 	
-	//let device go on
-	//TVP_GetOutputAndRates(&tvidfrmt);
-	//tvidfrmt.YUV_OutputFormat = TVP_YOF_YUV; //YUV422
-	//TVP_SetOutputAndRates(&tvidfrmt);
+	TVP_GetOutputAndRates(&tvidfrmt);
+	tvidfrmt.YUV_OutputFormat = TVP_YOF_ITU; //YUV422
+	TVP_SetOutputAndRates(&tvidfrmt);
 }
 
 

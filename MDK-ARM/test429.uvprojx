@@ -491,6 +491,21 @@
               <FileType>1</FileType>
               <FilePath>..\Src\svga050.c</FilePath>
             </File>
+            <File>
+              <FileName>graph.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\graph.c</FilePath>
+            </File>
+            <File>
+              <FileName>font.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\font.c</FilePath>
+            </File>
+            <File>
+              <FileName>Tahoma24pt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\Tahoma24pt.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -2,11 +2,11 @@
 
 void SVGA_Init()
 {
+  SVGA_SetInputVideoType(SVGA_SM_YCbCr_444_24, SVGA_SSM_EmbeddedSync0, SVGA_NonInterlaced);
 	SVGA_SetDisplayOff(0,0,0);
   SVGA_SetVcomLevel(0x80);
 	//test field
 	SVGA_SetTestPattern(SVGA_TP_Chess, 20, 20, SVGA_TPC_Black, SVGA_TPC_White);
-	
 }
 
 
