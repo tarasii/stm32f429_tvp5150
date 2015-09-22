@@ -20,7 +20,7 @@ void TVP_Init()
 	TVP_SetImageConfig(&tcfg);
 	
 	TVP_GetOutputAndRates(&tvidfrmt);
-	tvidfrmt.YUV_OutputFormat = TVP_YOF_ITU; //YUV422
+	tvidfrmt.YUV_OutputFormat = TVP_YOF_ITU;
 	TVP_SetOutputAndRates(&tvidfrmt);
 }
 

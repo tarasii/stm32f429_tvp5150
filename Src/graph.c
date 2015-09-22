@@ -25,15 +25,18 @@ uint8_t GRPH_GetCr(uint8_t r, uint8_t g, uint8_t b)
 
 void GRPH_PutPixelRGB(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b)
 {
-	uint32_t addr;
+	uint16_t *addr;
 	uint16_t mx = GRPH_MAX_X;
+	//uint16_t my = DMA2D->NLR;//GRPH_MAX_Y;
 	uint16_t my = GRPH_MAX_Y;
 	
 	if(x > mx || y > my) return;
-	addr = y * GRPH_MAX_X * 3 + x * 3;
-	VideoBuff[addr]     = GRPH_GetY (r, g, b);
-	VideoBuff[addr + 1] = GRPH_GetCb(r, g, b);
-	VideoBuff[addr + 2] = GRPH_GetCr(r, g, b);
+	
+	addr = (uint16_t *) DMA2D->FGMAR + y * GRPH_MAX_X + x;
+	*addr = ((r & 0x1f) << 10) + ((g & 0x3f) << 5) + (b & 0x1f);
+//	VideoBuff[addr]     = GRPH_GetY (r, g, b);
+//	VideoBuff[addr + 1] = GRPH_GetCb(r, g, b);
+//	VideoBuff[addr + 2] = GRPH_GetCr(r, g, b);
 }
 
 void GRPH_PutPixel(uint16_t x, uint16_t y, GRPH_RGB *rgb)

@@ -2,6 +2,7 @@
 #define __graph_H
 
 #include <stdint.h>
+#include "dma2d.h"
 
 #define GRPH_MAX_X 640
 #define GRPH_MAX_Y 480

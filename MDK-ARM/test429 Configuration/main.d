@@ -23,6 +23,7 @@ test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h
+test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma2d.h
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi.h
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi_ex.h
 test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h
@@ -40,6 +41,7 @@ test429 configuration\main.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_
 test429 configuration\main.o: ..\Inc\adc.h
 test429 configuration\main.o: ..\Inc\dcmi.h
 test429 configuration\main.o: ..\Inc\dma.h
+test429 configuration\main.o: ..\Inc\dma2d.h
 test429 configuration\main.o: ..\Inc\i2c.h
 test429 configuration\main.o: ..\Inc\ltdc.h
 test429 configuration\main.o: ..\Inc\usart.h

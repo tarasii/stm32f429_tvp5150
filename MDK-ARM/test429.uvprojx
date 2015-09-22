@@ -373,7 +373,7 @@
               <MiscControls>--C99</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F439xx</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Inc;..\Drivers\STM32F4xx_HAL_Driver\Inc;..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy;..\Drivers\CMSIS\Include;..\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\Drivers\STM32F4xx_HAL_Driver\Src</IncludePath>
+              <IncludePath>..\Inc; ..\Drivers\STM32F4xx_HAL_Driver\Inc; ..\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy; ..\Drivers\CMSIS\Include; ..\Drivers\CMSIS\Device\ST\STM32F4xx\Include; ..\Drivers\STM32F4xx_HAL_Driver\Src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -506,6 +506,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\Tahoma24pt.c</FilePath>
             </File>
+            <File>
+              <FileName>dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\dma2d.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -630,6 +635,11 @@
               <FileName>stm32f4xx_hal_ltdc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_ltdc.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_dma2d.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma2d.c</FilePath>
             </File>
           </Files>
         </Group>

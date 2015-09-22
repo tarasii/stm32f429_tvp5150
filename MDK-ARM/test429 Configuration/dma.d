@@ -24,6 +24,7 @@ test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_d
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h
+test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma2d.h
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi.h
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dcmi_ex.h
 test429 configuration\dma.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h
