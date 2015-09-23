@@ -74,6 +74,11 @@ void TVP_SetOperatingModeControls(bool PowerDown, bool GLCO)
 	TVP_Write(TVP_Addr_OperatingModeControls, tmp);
 }
 
+void TVP_PowerDown()
+{
+	TVP_SetOperatingModeControls(1, 0);
+}
+
 void TVP_GetOperatingModeControls(TVP_OMC_StructTypeDef *res)
 {
 	res->VAL 	 		 = TVP_Read(TVP_Addr_OperatingModeControls);

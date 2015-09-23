@@ -38,7 +38,7 @@ void SVGA_GetInputVideoTypeSet(SVGA_SCM_StructTypeDef *res)
 	res->VAL = SVGA_Read(SVGA_Addr_InputVideoTypeSet);
 	res->SignalMode = (SVGA_SM_TypeDef)  ((res->VAL >> 4) & 7);
 	res->SyncSignal = (SVGA_SSM_TypeDef) ((res->VAL >> 2) & 3);
-	res->ScanMode   = (SVGA_SCM_TypeDef)  (res->VAL & 3);
+	res->ScanMode   = (SVGA_SCM_TypeDef) ( res->VAL       & 3);
 }
 
 void SVGA_SetInputVideoType(SVGA_SM_TypeDef signal_mode, SVGA_SSM_TypeDef sync_signal, SVGA_SCM_TypeDef scan_mode)
@@ -54,7 +54,7 @@ void SVGA_GetSyncSignalPolarity(SVGA_SP_StructTypeDef *res)
 	res->Enable_3D          = (bool) ((res->VAL >> 5) & 1);
 	res->Refresh_3D         = (bool) ((res->VAL >> 2) & 1);
 	res->VericalPolarity    = (bool) ((res->VAL >> 1) & 1);
-	res->HorisontalPolarity = (bool)  (res->VAL & 1);
+	res->HorisontalPolarity = (bool) ( res->VAL       & 1);
 }
 
 void SVGA_SetSyncSignalPolarity(bool enable_3d, bool refresh_3d, bool v_pol, bool h_pol)
@@ -165,7 +165,7 @@ void SVGA_GetPowerDown(SVGA_PD_StructTypeDef *res)
 	res->RDACPD  = (bool) ((res->VAL >> 3) & 1);
 	res->RAMPPD  = (bool) ((res->VAL >> 2) & 1);
 	res->VCOMPD  = (bool) ((res->VAL >> 1) & 1);
-	res->TSENPD  = (bool)  (res->VAL & 3);
+	res->TSENPD  = (bool) ( res->VAL       & 1);
 }
 
 void SVGA_SetPowerDown(bool PDOWN, bool BSGENPD, bool RDACPD, bool RAMPPD, bool VCOMPD, bool TSENPD)
@@ -180,7 +180,7 @@ void SVGA_GetDisplayOff(SVGA_DO_StructTypeDef *res)
 	res->VAL = SVGA_Read(SVGA_Addr_DisplayOff);
 	res->DispOff = (bool) ((res->VAL >> 2) & 1);
 	res->VSCAN   = (bool) ((res->VAL >> 1) & 1);
-	res->HSCAN   = (bool)  (res->VAL & 3);
+	res->HSCAN   = (bool) ( res->VAL       & 1);
 }
 
 void SVGA_SetDisplayOff(bool DispOff, bool VSCAN, bool HSCAN)

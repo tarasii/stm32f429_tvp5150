@@ -3,7 +3,7 @@
 const FONT_INFO *font = 0;      //
 
 
-uint8_t LCD_PutCharRGB(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, uint8_t c)
+uint8_t LCD_PutCharRGB(uint16_t x, uint16_t y, uint8_t c)
 {
     if(!font) return 0;
     if(c < font->FirstChar || c > font->LastChar) return 0;
@@ -17,14 +17,14 @@ uint8_t LCD_PutCharRGB(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, 
 		{
           for(j = 0; j < height; ++j)
 					{
-                 if( (CHAR_START_INDEX(c) + i) ) GRPH_PutPixelRGB( x+i,  y+j, r, g, b);
-						     else GRPH_PutPixelRGB( x+i,  y+j, 0, 0, 0);
+                 if( (CHAR_START_INDEX(c) + i) ) GRPH_PutPixel( x+i,  y+j);
+						     //else GRPH_PutPixel( x+i,  y+j); back color
           }                        
     }
 		return width;
 }
 
-void LCD_PutStrigRGB(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, const char *str)
+void LCD_PutStrig(uint16_t x, uint16_t y, const char *str)
 {   
    uint8_t CharWidth = 0;
    
@@ -36,7 +36,7 @@ void LCD_PutStrigRGB(uint16_t x, uint16_t y, uint8_t r, uint8_t g, uint8_t b, co
 	    {
 		    x += CHAR_SPACE;
 	    }   
-      CharWidth = LCD_PutCharRGB(x, y, r, g, b, *str);
+      CharWidth = LCD_PutCharRGB(x, y, *str);
       x += CharWidth;
       str++;	  
    }	

@@ -24,3 +24,7 @@ typedef struct
 
 //Project installed fonts
 extern const FONT_INFO tahoma24ptFontInfo;
+
+uint8_t LCD_PutCharRGB(uint16_t x, uint16_t y, uint8_t c);
+void LCD_PutStrig(uint16_t x, uint16_t y, const char *str);
+

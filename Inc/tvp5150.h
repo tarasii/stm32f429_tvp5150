@@ -636,6 +636,8 @@ uint8_t TVP_GetVBI_FIFO_Data(void);
 void TVP_SetTeletextFilterControl(TVP_TTC_StructTypeDef *res);
 void TVP_GetTeletextFilterControl(TVP_TTC_StructTypeDef *res);
 
+void TVP_PowerDown(void);
+
 //Taras Ivaniv
 
 #endif /*__ tvp5150_H */

@@ -511,6 +511,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\dma2d.c</FilePath>
             </File>
+            <File>
+              <FileName>itg3200.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\itg3200.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
