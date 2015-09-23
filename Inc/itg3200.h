@@ -77,20 +77,20 @@ typedef struct
 #define		ITG_READ_ADDRESS 0xD1  //AD0 = 0
 //#define	ITG_READ_ADDRESS 0xD3  //AD0 = 1
 
-#define ITG_Addr_WHO_AM_I     0x00 //
+#define ITG_Addr_WHO_AM_I     0x00 // rw
 #define ITG_Addr_SMPLRT_DIV   0x15 //
 #define ITG_Addr_DLPF_FS      0x16 //
 #define ITG_Addr_INT_CFG      0x17 //
-#define ITG_Addr_INT_STATUS   0x1A //* r
-#define ITG_Addr_TEMP_OUT_H   0x1B //*
-#define ITG_Addr_TEMP_OUT_L   0x1C //*
-#define ITG_Addr_GYRO_XOUT_H  0x1D //*
-#define ITG_Addr_GYRO_XOUT_L  0x1E //*
-#define ITG_Addr_GYRO_YOUT_H  0x1F //*
-#define ITG_Addr_GYRO_YOUT_L  0x20 //*
-#define ITG_Addr_GYRO_ZOUT_H  0x21 //*
-#define ITG_Addr_GYRO_ZOUT_L  0x22 //*
-#define ITG_Addr_PWR_MGM      0x3E //*
+#define ITG_Addr_INT_STATUS   0x1A // r
+#define ITG_Addr_TEMP_OUT_H   0x1B //
+#define ITG_Addr_TEMP_OUT_L   0x1C //
+#define ITG_Addr_GYRO_XOUT_H  0x1D //
+#define ITG_Addr_GYRO_XOUT_L  0x1E //
+#define ITG_Addr_GYRO_YOUT_H  0x1F //
+#define ITG_Addr_GYRO_YOUT_L  0x20 //
+#define ITG_Addr_GYRO_ZOUT_H  0x21 //
+#define ITG_Addr_GYRO_ZOUT_L  0x22 //
+#define ITG_Addr_PWR_MGM      0x3E // rw
 //#define ITG_Addr_             0x00 //*
 
 
@@ -99,9 +99,9 @@ void ITG_WriteByte(uint8_t addr, uint8_t data);
 uint8_t ITG_ReadByte(uint8_t addr);
 uint8_t ITG_GetChipAddr(void);
 void ITG_SetChipAddr(uint8_t res);
-uint8_t ITG_GetSampleRateDivider();
+uint8_t ITG_GetSampleRateDivider(void);
 void ITG_SetSampleRateDivider(uint8_t res);
-ITG_DLPF_TypeDef ITG_GetDLPF_Config();
+ITG_DLPF_TypeDef ITG_GetDLPF_Config(void);
 void ITG_SetDLPF_Config(ITG_DLPF_TypeDef dlpf);
 void ITG_GetIntConfig(ITG_INT_StructTypeDef *res);
 void ITG_SetIntConfig(bool actl, bool open, bool latch, bool any_rd, bool itg_rdy, bool raw_rdy);

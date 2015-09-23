@@ -20,8 +20,9 @@ void SVGA_Write(uint8_t addr, uint8_t data)
 
 uint8_t SVGA_Read(uint8_t addr)
 {
-	uint8_t i2cbuf[2], i2cbuflen = 0;
-	I2C1_ReadBuffer(SVGA_READ_ADDRESS, addr, i2cbuf, i2cbuflen);
+	uint8_t i2cbuf[1];
+  I2C1_WriteBuffer(SVGA_READ_ADDRESS, &addr, 1);
+	I2C1_ReadBuffer(SVGA_READ_ADDRESS, addr, i2cbuf, 1);
 	return i2cbuf[0];
 }
 
