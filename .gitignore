@@ -47,6 +47,10 @@ Temporary Items
 .iex
 .bak
 .dep
+.o
+.tmp
+.crf
+.d
 /obj/*
 /obj
 /Inc/Backup/*

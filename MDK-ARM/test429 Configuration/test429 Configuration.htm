@@ -3,7 +3,7 @@
 <title>Static Call Graph - [test429 Configuration\test429 Configuration.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image test429 Configuration\test429 Configuration.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060020: Last Updated: Wed Sep 23 14:29:51 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060020: Last Updated: Wed Sep 23 15:50:15 2015
 <BR><P>
 <H3>Maximum Stack Usage =        232 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -696,13 +696,13 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_ER_IRQHandler
 </UL>
 
-<P><STRONG><a name="[b8]"></a>HAL_I2C_GetError</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_hal_i2c.o(i.HAL_I2C_GetError))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<P><STRONG><a name="[b7]"></a>HAL_I2C_GetError</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_hal_i2c.o(i.HAL_I2C_GetError))
+<BR><BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_ReadBuffer
 </UL>
 
-<P><STRONG><a name="[b9]"></a>HAL_I2C_GetState</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_hal_i2c.o(i.HAL_I2C_GetState))
-<BR><BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<P><STRONG><a name="[b8]"></a>HAL_I2C_GetState</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_hal_i2c.o(i.HAL_I2C_GetState))
+<BR><BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_ReadBuffer
 </UL>
 
@@ -739,7 +739,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_WaitOnFlagUntilTimeout
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C_MasterRequestWrite
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<BR>[Called By]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
 </UL>
 
 <P><STRONG><a name="[bb]"></a>HAL_I2C_MemRxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_i2c.o(i.HAL_I2C_MemRxCpltCallback))
@@ -1007,10 +1007,10 @@ Global Symbols
 <P><STRONG><a name="[ae]"></a>HAL_UART_IRQHandler</STRONG> (Thumb, 266 bytes, Stack size 16 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_IRQHandler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = HAL_UART_IRQHandler &rArr; UART_Receive_IT
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Transmit_IT
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive_IT
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_TxCpltCallback
+<BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_TxCpltCallback
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_ErrorCallback
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Transmit_IT
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_Receive_IT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_IRQHandler
 </UL>
@@ -1057,27 +1057,26 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f439xx.o(RESET)
 </UL>
-<P><STRONG><a name="[b6]"></a>I2C1_ReadBuffer</STRONG> (Thumb, 68 bytes, Stack size 40 bytes, i2c.o(i.I2C1_ReadBuffer))
-<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = I2C1_ReadBuffer &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[b6]"></a>I2C1_ReadBuffer</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, i2c.o(i.I2C1_ReadBuffer))
+<BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = I2C1_ReadBuffer &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Master_Receive
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetState
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetError
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetState
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_Read
 </UL>
 
-<P><STRONG><a name="[b7]"></a>I2C1_WriteBuffer</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, i2c.o(i.I2C1_WriteBuffer))
+<P><STRONG><a name="[b9]"></a>I2C1_WriteBuffer</STRONG> (Thumb, 54 bytes, Stack size 24 bytes, i2c.o(i.I2C1_WriteBuffer))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Master_Transmit
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetState
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetError
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetState
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_GetError
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_ReadBuffer
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVGA_Write
+<BR>[Called By]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVGA_Write
 <LI><a href="#[da]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_Write
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_Read
 </UL>
 
 <P><STRONG><a name="[63]"></a>LTDC_ER_IRQHandler</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.LTDC_ER_IRQHandler))
@@ -1214,7 +1213,7 @@ Global Symbols
 <P><STRONG><a name="[cc]"></a>SVGA_Write</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, svga050.o(i.SVGA_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = SVGA_Write &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVGA_SetTestPattern
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SVGA_SetInputVideoType
@@ -1247,7 +1246,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f439xx.o(.text)
 </UL>
 <P><STRONG><a name="[d0]"></a>TVP_GetOutputAndRates</STRONG> (Thumb, 38 bytes, Stack size 8 bytes, tvp5150.o(i.TVP_GetOutputAndRates))
-<BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = TVP_GetOutputAndRates &rArr; TVP_Read &rArr; I2C1_ReadBuffer &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = TVP_GetOutputAndRates &rArr; TVP_Read &rArr; I2C1_ReadBuffer &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_Read
 </UL>
@@ -1255,7 +1254,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[d2]"></a>TVP_Init</STRONG> (Thumb, 64 bytes, Stack size 24 bytes, tvp5150.o(i.TVP_Init))
-<BR><BR>[Stack]<UL><LI>Max Depth = 200<LI>Call Chain = TVP_Init &rArr; TVP_GetOutputAndRates &rArr; TVP_Read &rArr; I2C1_ReadBuffer &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = TVP_Init &rArr; TVP_GetOutputAndRates &rArr; TVP_Read &rArr; I2C1_ReadBuffer &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[d6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_SetPinsConfig
 <LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_SetOutputAndRates
@@ -1277,10 +1276,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_Init
 </UL>
 
-<P><STRONG><a name="[d1]"></a>TVP_Read</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, tvp5150.o(i.TVP_Read))
-<BR><BR>[Stack]<UL><LI>Max Depth = 168<LI>Call Chain = TVP_Read &rArr; I2C1_ReadBuffer &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[d1]"></a>TVP_Read</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, tvp5150.o(i.TVP_Read))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = TVP_Read &rArr; I2C1_ReadBuffer &rArr; HAL_I2C_Master_Receive &rArr; I2C_MasterRequestRead &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_ReadBuffer
+<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_ReadBuffer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_GetOutputAndRates
 </UL>
@@ -1326,7 +1326,7 @@ Global Symbols
 <P><STRONG><a name="[da]"></a>TVP_Write</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, tvp5150.o(i.TVP_Write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = TVP_Write &rArr; I2C1_WriteBuffer &rArr; HAL_I2C_Master_Transmit &rArr; I2C_MasterRequestWrite &rArr; I2C_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
+<BR>[Calls]<UL><LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;I2C1_WriteBuffer
 </UL>
 <BR>[Called By]<UL><LI><a href="#[d9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_SetOutputAndRates
 <LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TVP_SetInputSource

@@ -17,8 +17,8 @@ uint8_t LCD_PutCharRGB(uint16_t x, uint16_t y, uint8_t c)
 		{
           for(j = 0; j < height; ++j)
 					{
-                 if( (CHAR_START_INDEX(c) + i) ) GRPH_PutPixel( x+i,  y+j);
-						     //else GRPH_PutPixel( x+i,  y+j); back color
+                 if( (CHAR_START_INDEX(c) + i)) GRPH_PutPixel(x+i, y+j);
+						     //else GRPH_PutPixel( x+i, y+j); back color
           }                        
     }
 		return width;
