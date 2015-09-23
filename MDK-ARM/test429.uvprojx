@@ -516,6 +516,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\itg3200.c</FilePath>
             </File>
+            <File>
+              <FileName>24l64.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\24l64.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

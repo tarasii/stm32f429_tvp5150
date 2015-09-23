@@ -148,9 +148,9 @@ typedef struct
 //	uint8_t VAL;
 //}SVGA__StructTypeDef; //   structure
 
-//#define TVP_WRITE_ADDRESS 0x1C //SELADR0 = 0
+//#define SVGA_WRITE_ADDRESS 0x1C //SELADR0 = 0
 #define	  SVGA_WRITE_ADDRESS 0x1E //SELADR0 = 1
-//#define	TVP_READ_ADDRESS 0x1D  //SELADR0 = 0
+//#define	SVGA_READ_ADDRESS 0x1D  //SELADR0 = 0
 #define	  SVGA_READ_ADDRESS 0x1F  //SELADR0 = 1
 
 #define SVGA_Default_VCOM_Level 0x1B
