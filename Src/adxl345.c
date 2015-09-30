@@ -27,7 +27,7 @@ uint8_t ADXL_GetDeviceId()
 {
 	uint8_t res;
 	res = ADXL_ReadByte(ADXL_Addr_DEVID);
-	return res << 1;
+	return res;
 }
 
 uint8_t ADXL_GetTapThreshold()
