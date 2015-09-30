@@ -19,6 +19,7 @@
 "test429 configuration\dma2d.o"
 "test429 configuration\itg3200.o"
 "test429 configuration\24l64.o"
+"test429 configuration\adxl345.o"
 "test429 configuration\stm32f4xx_hal_ltdc_ex.o"
 "test429 configuration\stm32f4xx_hal_flash.o"
 "test429 configuration\stm32f4xx_hal_adc_ex.o"

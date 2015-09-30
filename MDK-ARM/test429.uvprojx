@@ -521,6 +521,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\24l64.c</FilePath>
             </File>
+            <File>
+              <FileName>adxl345.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\adxl345.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
