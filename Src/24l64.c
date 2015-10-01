@@ -18,7 +18,7 @@ uint8_t EEPROM_ReadByte(uint16_t addr)
   I2C1_WriteBuffer(EEPROM_READ_ADDRESS, i2cbuf, 2);
 	i2cbuf[0] = 0;
 	i2cbuf[1] = 0;
-	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, addr, i2cbuf, 1);
+	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, i2cbuf, 1);
 	return i2cbuf[0];
 }
 
@@ -42,7 +42,7 @@ uint16_t EEPROM_ReadWord(uint16_t addr)
 	i2cbuf[1] = 0;
 	i2cbuf[2] = 0;
 	i2cbuf[3] = 0;
-	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, addr, i2cbuf, 2);
+	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, i2cbuf, 2);
 	return i2cbuf[0] * 0xff + i2cbuf[1];
 }
 
@@ -68,7 +68,7 @@ uint32_t EEPROM_ReadDoubleWord(uint16_t addr)
 	i2cbuf[1] = 0;
 	i2cbuf[2] = 0;
 	i2cbuf[3] = 0;
-	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, addr, i2cbuf, 4);
+	I2C1_ReadBuffer(EEPROM_READ_ADDRESS, i2cbuf, 4);
 	return i2cbuf[0] * 0xffffff + i2cbuf[1] * 0xffff + i2cbuf[2] * 0xff + i2cbuf[3];
 }
 

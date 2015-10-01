@@ -88,9 +88,9 @@ typedef struct
 #define HMC_Addr_Z_MSB      0x07 // r
 #define HMC_Addr_Z_LSB      0x08 // r
 #define HMC_Addr_Status     0x09 // r
-#define HMC_Addr_IdentA     0x1A // r
-#define HMC_Addr_IdentB     0x1B // r
-#define HMC_Addr_IdentC     0x1C // r
+#define HMC_Addr_IdentA     0x0A // r
+#define HMC_Addr_IdentB     0x0B // r
+#define HMC_Addr_IdentC     0x0C // r
 //#define HMC_Addr_             0x00 //*
 
 void HMC_Init(void);

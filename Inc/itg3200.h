@@ -29,9 +29,9 @@ typedef struct
 
 typedef struct
 {
-	uint16_t X;    //
-	uint16_t Y;    //
-	uint16_t Z;    //
+	int16_t X;    //
+	int16_t Y;    //
+	int16_t Z;    //
 }ITG_XYZ_StructTypeDef; //   structure
 
 typedef enum
@@ -106,10 +106,10 @@ void ITG_SetDLPF_Config(ITG_DLPF_TypeDef dlpf);
 void ITG_GetIntConfig(ITG_INT_StructTypeDef *res);
 void ITG_SetIntConfig(bool actl, bool open, bool latch, bool any_rd, bool itg_rdy, bool raw_rdy);
 void ITG_GetIntStatus(ITG_INT_StructTypeDef *res);
-uint16_t ITG_GetTemperature(void);
-uint16_t ITG_GetX(void);
-uint16_t ITG_GetY(void);
-uint16_t ITG_GetZ(void);
+int16_t ITG_GetTemperature(void);
+int16_t ITG_GetX(void);
+int16_t ITG_GetY(void);
+int16_t ITG_GetZ(void);
 void ITG_GetXYZ(ITG_XYZ_StructTypeDef *res);
 void ITG_GetPowerManagement(ITG_PM_StructTypeDef *res);
 void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, uint8_t clk);

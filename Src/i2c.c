@@ -200,10 +200,8 @@ void I2C1_WriteBuffer(uint8_t I2C_ADDRESS, uint8_t *aTxBuffer, uint8_t TXBUFFERS
       }
 }
 
-void I2C1_ReadBuffer(uint8_t I2C_ADDRESS, uint8_t RegAddr, uint8_t *aRxBuffer, uint8_t RXBUFFERSIZE)
+void I2C1_ReadBuffer(uint8_t I2C_ADDRESS, uint8_t *aRxBuffer, uint8_t RXBUFFERSIZE)
 {
-    /* -> Lets ask for register's address */
-    //I2C1_WriteBuffer(I2C_ADDRESS, &RegAddr, 1);
  
     /* -> Put I2C peripheral in reception process */
     while(HAL_I2C_Master_Receive(&hi2c1, (uint16_t)I2C_ADDRESS<<1, aRxBuffer, (uint16_t)RXBUFFERSIZE, (uint32_t)1000) != HAL_OK)

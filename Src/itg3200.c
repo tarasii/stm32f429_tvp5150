@@ -18,7 +18,7 @@ uint8_t ITG_ReadByte(uint8_t addr)
 {
 	uint8_t i2cbuf[1];
   I2C1_WriteBuffer(ITG_READ_ADDRESS, &addr, 1);
-	I2C1_ReadBuffer(ITG_READ_ADDRESS, addr, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
 	return i2cbuf[0];
 }
 
@@ -86,47 +86,81 @@ void ITG_GetIntStatus(ITG_INT_StructTypeDef *res)
 	res->RAW_RDY = (bool) ( res->VAL       & 1);	
 }
 
-uint16_t ITG_GetTemperature()
+int16_t ITG_GetTemperature()
 {
 	uint16_t res = 0;
-	res = ITG_ReadByte(ITG_Addr_TEMP_OUT_H);
-	res = res << 8;
-	res = res + ITG_ReadByte(ITG_Addr_TEMP_OUT_L);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ITG_Addr_TEMP_OUT_H;
+  I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ITG_ReadByte(ITG_Addr_TEMP_OUT_H);
+//	res = res << 8;
+//	res = res + ITG_ReadByte(ITG_Addr_TEMP_OUT_L);
 	return res;
 }
 
-uint16_t ITG_GetX()
+int16_t ITG_GetX()
 {
 	uint16_t res = 0;
-	res = ITG_ReadByte(ITG_Addr_GYRO_XOUT_H);
-	res = res << 8;
-	res = res + ITG_ReadByte(ITG_Addr_GYRO_XOUT_L);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ITG_Addr_GYRO_XOUT_H;
+  I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ITG_ReadByte(ITG_Addr_GYRO_XOUT_H);
+//	res = res << 8;
+//	res = res + ITG_ReadByte(ITG_Addr_GYRO_XOUT_L);
 	return res;
 }
 
-uint16_t ITG_GetY()
+int16_t ITG_GetY()
 {
 	uint16_t res = 0;
-	res = ITG_ReadByte(ITG_Addr_GYRO_YOUT_H);
-	res = res << 8;
-	res = res + ITG_ReadByte(ITG_Addr_GYRO_YOUT_L);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ITG_Addr_GYRO_YOUT_H;
+  I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ITG_ReadByte(ITG_Addr_GYRO_YOUT_H);
+//	res = res << 8;
+//	res = res + ITG_ReadByte(ITG_Addr_GYRO_YOUT_L);
 	return res;
 }
 
-uint16_t ITG_GetZ()
+int16_t ITG_GetZ()
 {
 	uint16_t res = 0;
-	res = ITG_ReadByte(ITG_Addr_GYRO_ZOUT_H);
-	res = res << 8;
-	res = res + ITG_ReadByte(ITG_Addr_GYRO_ZOUT_L);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ITG_Addr_GYRO_ZOUT_H;
+  I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ITG_ReadByte(ITG_Addr_GYRO_ZOUT_H);
+//	res = res << 8;
+//	res = res + ITG_ReadByte(ITG_Addr_GYRO_ZOUT_L);
 	return res;
 }
 
 void ITG_GetXYZ(ITG_XYZ_StructTypeDef *res)
 {
-	res->X = ITG_GetX();
-	res->Y = ITG_GetY();
-	res->Z = ITG_GetZ();
+	uint8_t i2cbuf[6];
+	i2cbuf[0] = ITG_Addr_GYRO_XOUT_H;
+  I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 6);
+
+	res->X = (i2cbuf[0] << 8)| i2cbuf[1];
+	res->Y = (i2cbuf[2] << 8)| i2cbuf[3];
+	res->Z = (i2cbuf[4] << 8)| i2cbuf[5];
+
+//	res->X = ITG_GetX();
+//	res->Y = ITG_GetY();
+//	res->Z = ITG_GetZ();
+
 }
 
 void ITG_GetPowerManagement(ITG_PM_StructTypeDef *res)

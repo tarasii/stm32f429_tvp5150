@@ -164,10 +164,10 @@ typedef struct
 //}ITG__StructTypeDef; //   structure
 
 
-#define		ADXL_WRITE_ADDRESS 0x3A //ALT ADDRESS = 1
-//#define	ADXL_WRITE_ADDRESS 0xA6 //ALT ADDRESS = 0
-#define		ADXL_READ_ADDRESS 0x3B  //ALT ADDRESS = 1
-//#define	ADXL_READ_ADDRESS 0xA7  //ALT ADDRESS = 0
+//#define		ADXL_WRITE_ADDRESS 0x3A //ALT ADDRESS = 1
+#define	ADXL_WRITE_ADDRESS 0xA6 //ALT ADDRESS = 0
+//#define		ADXL_READ_ADDRESS 0x3B  //ALT ADDRESS = 1
+#define	ADXL_READ_ADDRESS 0xA7  //ALT ADDRESS = 0
 
 #define ADXL_Addr_DEVID          0x00 // r
 #define ADXL_Addr_TAP_THRESH     0x1D // rw

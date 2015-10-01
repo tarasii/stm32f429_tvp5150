@@ -2,7 +2,7 @@
 
 void HMC_Init()
 {
-	return;
+	//HMC_Set_Configurarion(HMC_DR_15,HMC_MR_SMM,HMC_GS_1_9);
 }
 
 
@@ -18,7 +18,7 @@ uint8_t HMC_ReadByte(uint8_t addr)
 {
 	uint8_t i2cbuf[1];
   I2C1_WriteBuffer(HMC_READ_ADDRESS, &addr, 1);
-	I2C1_ReadBuffer(HMC_READ_ADDRESS, addr, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
 	return i2cbuf[0];
 }
 
@@ -59,35 +59,62 @@ void HMC_Set_MODE(HMC_MR_TypeDef mode)
 int16_t HMC_GetX()
 {
 	int16_t res = 0;
-	res = HMC_ReadByte(HMC_Addr_X_MSB);
-	res = res << 8;
-	res = res + HMC_ReadByte(HMC_Addr_X_LSB);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = HMC_Addr_X_MSB;
+  I2C1_WriteBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = HMC_ReadByte(HMC_Addr_X_MSB);
+//	res = res << 8;
+//	res = res + HMC_ReadByte(HMC_Addr_X_LSB);
 	return res;
 }
 
 int16_t HMC_GetY()
 {
 	int16_t res = 0;
-	res = HMC_ReadByte(HMC_Addr_Y_MSB);
-	res = res << 8;
-	res = res + HMC_ReadByte(HMC_Addr_Y_LSB);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = HMC_Addr_Y_MSB;
+  I2C1_WriteBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = HMC_ReadByte(HMC_Addr_Y_MSB);
+//	res = res << 8;
+//	res = res + HMC_ReadByte(HMC_Addr_Y_LSB);
 	return res;
 }
 
 int16_t HMC_GetZ()
 {
 	int16_t res = 0;
-	res = HMC_ReadByte(HMC_Addr_Z_MSB);
-	res = res << 8;
-	res = res + HMC_ReadByte(HMC_Addr_Z_LSB);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = HMC_Addr_Z_MSB;
+  I2C1_WriteBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = HMC_ReadByte(HMC_Addr_Z_MSB);
+//	res = res << 8;
+//	res = res + HMC_ReadByte(HMC_Addr_Z_LSB);
 	return res;
 }
 
 void HMC_GetXYZ(HMC_XYZ_StructTypeDef *res)
 {
-	res->X = HMC_GetX();
-	res->Y = HMC_GetY();
-	res->Z = HMC_GetZ();
+	uint8_t i2cbuf[6];
+	i2cbuf[0] = HMC_Addr_X_MSB;
+  I2C1_WriteBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 6);
+
+	res->X = (i2cbuf[0] << 8)| i2cbuf[1];
+	res->Y = (i2cbuf[2] << 8)| i2cbuf[3];
+	res->Z = (i2cbuf[4] << 8)| i2cbuf[5];
+
+//	res->X = HMC_GetX();
+//	res->Y = HMC_GetY();
+//	res->Z = HMC_GetZ();
 }
 
 void HMC_GetStatus(HMC_SR_StructTypeDef *res)
@@ -100,9 +127,18 @@ void HMC_GetStatus(HMC_SR_StructTypeDef *res)
 
 void HMC_GetId(HMC_ID_StructTypeDef *res)
 {
-	res->VALA  = HMC_ReadByte(HMC_Addr_IdentA);
-	res->VALB  = HMC_ReadByte(HMC_Addr_IdentB);
-	res->VALC  = HMC_ReadByte(HMC_Addr_IdentC);
+	uint8_t i2cbuf[3];
+	i2cbuf[0] = HMC_Addr_IdentA;
+  I2C1_WriteBuffer(HMC_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 3);
+
+	res->VALA = i2cbuf[0];
+	res->VALB = i2cbuf[1];
+	res->VALC = i2cbuf[2];
+	
+//	res->VALA  = HMC_ReadByte(HMC_Addr_IdentA);
+//	res->VALB  = HMC_ReadByte(HMC_Addr_IdentB);
+//	res->VALC  = HMC_ReadByte(HMC_Addr_IdentC);
 }
 
 bool HMC_TestConnection()

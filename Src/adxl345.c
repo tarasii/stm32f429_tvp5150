@@ -2,7 +2,7 @@
 
 void ADXL_Init()
 {
-	return;
+	ADXL_SetPowerSaving(0,0,1,0,ADXL_WU_8);
 }
 
 
@@ -18,7 +18,7 @@ uint8_t ADXL_ReadByte(uint8_t addr)
 {
 	uint8_t i2cbuf[1];
   I2C1_WriteBuffer(ADXL_READ_ADDRESS, &addr, 1);
-	I2C1_ReadBuffer(ADXL_READ_ADDRESS, addr, i2cbuf, 1);
+	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
 	return i2cbuf[0];
 }
 
@@ -350,35 +350,61 @@ void ADXL_SelfTest()
 uint16_t ADXL_GetX()
 {
 	uint16_t res = 0;
-	res = ADXL_ReadByte(ADXL_Addr_DATAX0);
-	res = res << 8;
-	res = res + ADXL_ReadByte(ADXL_Addr_DATAX1);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ADXL_Addr_DATAX0;
+  I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ADXL_ReadByte(ADXL_Addr_DATAX0);
+//	res = res << 8;
+//	res = res + ADXL_ReadByte(ADXL_Addr_DATAX1);
 	return res;
 }
 
 uint16_t ADXL_GetY()
 {
 	uint16_t res = 0;
-	res = ADXL_ReadByte(ADXL_Addr_DATAY0);
-	res = res << 8;
-	res = res + ADXL_ReadByte(ADXL_Addr_DATAY1);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ADXL_Addr_DATAY0;
+  I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ADXL_ReadByte(ADXL_Addr_DATAY0);
+//	res = res << 8;
+//	res = res + ADXL_ReadByte(ADXL_Addr_DATAY1);
 	return res;
 }
 
 uint16_t ADXL_GetZ()
 {
 	uint16_t res = 0;
-	res = ADXL_ReadByte(ADXL_Addr_DATAZ0);
-	res = res << 8;
-	res = res + ADXL_ReadByte(ADXL_Addr_DATAZ1);
+	uint8_t i2cbuf[2];
+	i2cbuf[0] = ADXL_Addr_DATAZ0;
+  I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
+
+	res = (i2cbuf[0] << 8)| i2cbuf[1];
+//	res = ADXL_ReadByte(ADXL_Addr_DATAZ0);
+//	res = res << 8;
+//	res = res + ADXL_ReadByte(ADXL_Addr_DATAZ1);
 	return res;
 }
 
 void ADXL_GetXYZ(ADXL_XYZ_StructTypeDef *res)
 {
-	res->X = ADXL_GetX();
-	res->Y = ADXL_GetY();
-	res->Z = ADXL_GetZ();
+	uint8_t i2cbuf[6];
+	i2cbuf[0] = ADXL_Addr_DATAX0;
+  I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
+	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 6);
+
+	res->X = (i2cbuf[0] << 8)| i2cbuf[1];
+	res->Y = (i2cbuf[2] << 8)| i2cbuf[3];
+	res->Z = (i2cbuf[4] << 8)| i2cbuf[5];
+//	res->X = ADXL_GetX();
+//	res->Y = ADXL_GetY();
+//	res->Z = ADXL_GetZ();
 }
 
 
