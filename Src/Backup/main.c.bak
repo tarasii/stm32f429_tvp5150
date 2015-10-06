@@ -35,15 +35,16 @@
 #include "adc.h"
 #include "dcmi.h"
 #include "dma.h"
+#include "dma2d.h"
 #include "i2c.h"
 #include "ltdc.h"
 #include "usart.h"
 #include "gpio.h"
 #include "fmc.h"
-#include "tvp5150.h"
-#include "svga050.h"
 
 /* USER CODE BEGIN Includes */
+#include "tvp5150.h"
+#include "svga050.h"
 
 /* USER CODE END Includes */
 
@@ -86,6 +87,7 @@ int main(void)
   MX_DMA_Init();
   MX_ADC1_Init();
   MX_DCMI_Init();
+  MX_DMA2D_Init();
   MX_FMC_Init();
   MX_I2C1_Init();
   MX_LTDC_Init();

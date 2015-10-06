@@ -267,6 +267,8 @@ void SVGA_SetRGB_SignalOffset(uint16_t red, uint16_t green, uint16_t blue);
 void SVGA_GetTestPattern(SVGA_TP_StructTypeDef *res);
 void SVGA_SetTestPattern(SVGA_TP_TypeDef pal, uint8_t line_width, uint8_t line_space, SVGA_TPC_TypeDef back_color, SVGA_TPC_TypeDef fore_color);
 
+void SVGA_InitPins(void);
+
 //Taras Ivaniv
 
 #endif /*__ svga050_H */

@@ -56,8 +56,8 @@ DMA_HandleTypeDef hdma_memtomem_dma2_stream0;
 void MX_DMA_Init(void) 
 {
   /* DMA controller clock enable */
-  __DMA2_CLK_ENABLE();
   __DMA1_CLK_ENABLE();
+  __DMA2_CLK_ENABLE();
 
   /* Configure DMA request hdma_memtomem_dma2_stream0 on DMA2_Stream0 */
   hdma_memtomem_dma2_stream0.Instance = DMA2_Stream0;

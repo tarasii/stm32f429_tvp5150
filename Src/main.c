@@ -45,6 +45,8 @@
 /* USER CODE BEGIN Includes */
 #include "tvp5150.h"
 #include "svga050.h"
+#include "graph.h"
+#include "itg3200.h"
 
 /* USER CODE END Includes */
 
@@ -52,6 +54,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+char str[] = "Hello word!";
 
 /* USER CODE END PV */
 
@@ -71,6 +74,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	ITG_XYZ_StructTypeDef lxyz;
 
   /* USER CODE END 1 */
 
@@ -94,8 +98,27 @@ int main(void)
   MX_USART1_UART_Init();
 
   /* USER CODE BEGIN 2 */
-	TVP_Init();
+	SDRAM_Init(&hsdram1);
+	//if (SDRAM_Init(&hsdram1)) GPIO_TOGGLE(GPIOG, GPIO_PIN_14);
+
 	SVGA_Init();
+	//ILI9341_Init();
+	GRPH_Init();
+	
+	ITG_Init();
+
+	HAL_LTDC_SetAlpha(&hltdc, 255, 0);
+	HAL_LTDC_SetAlpha(&hltdc, 0, 1);
+	
+	DMA2DGRPH_Fill();
+
+	GRPH_DrawRect(0,0,239,319);
+	GRPH_DrawLine(0,0,239,319);
+	GRPH_DrawLine(239,0,0,319);
+	GRPH_DrawCircle(120,160,60);
+
+	GRPH_SetXY(100, 150);
+	GRPH_Puts(str);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -105,9 +128,17 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
+		ITG_GetXYZ(&lxyz);
+		
+		sprintf(str, "%d; %d; %d;", lxyz.X, lxyz.Y, lxyz.Z);		
+		GRPH_SetXY(10, 10);
+		GRPH_Puts(str);
+		
+		HAL_Delay(100);
+		
 
   }
-  /* USER CODE END 3 */
+  /* USER CODE END s3 */
 
 }
 

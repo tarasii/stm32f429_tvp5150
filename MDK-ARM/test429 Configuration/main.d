@@ -50,3 +50,9 @@ test429 configuration\main.o: ..\Inc\fmc.h
 test429 configuration\main.o: ..\Inc\tvp5150.h
 test429 configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 test429 configuration\main.o: ..\Inc\svga050.h
+test429 configuration\main.o: ..\Inc\graph.h
+test429 configuration\main.o: ..\Inc\font_7_10.h
+test429 configuration\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+test429 configuration\main.o: ..\Inc\lcd.h
+test429 configuration\main.o: ..\Inc\sdram.h
+test429 configuration\main.o: ..\Inc\itg3200.h

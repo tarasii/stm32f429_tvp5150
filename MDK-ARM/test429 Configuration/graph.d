@@ -1,7 +1,10 @@
 test429 configuration\graph.o: ..\Src\graph.c
 test429 configuration\graph.o: ..\Inc\graph.h
 test429 configuration\graph.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-test429 configuration\graph.o: ..\Inc\dma2d.h
+test429 configuration\graph.o: ..\Inc\font_7_10.h
+test429 configuration\graph.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+test429 configuration\graph.o: ..\Inc\lcd.h
+test429 configuration\graph.o: ..\Inc\sdram.h
 test429 configuration\graph.o: ..\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h
 test429 configuration\graph.o: ..\Inc\stm32f4xx_hal_conf.h
 test429 configuration\graph.o: ..\Inc\mxconstants.h
