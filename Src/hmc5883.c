@@ -1,8 +1,10 @@
 #include "hmc5883.h"
 
-void HMC_Init()
+void HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain)
 {
-	//HMC_Set_Configurarion(HMC_DR_15,HMC_MR_SMM,HMC_GS_1_9);
+	//HMC_Set_Configurarion(HMC_DR_15, HMC_MR_SMM, HMC_GS_1_9);
+	HMC_Set_Configurarion(rate, moder, gain);
+	HMC_Set_MODE(mode);
 }
 
 
@@ -109,8 +111,8 @@ void HMC_GetXYZ(HMC_XYZ_StructTypeDef *res)
 	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 6);
 
 	res->X = (i2cbuf[0] << 8)| i2cbuf[1];
-	res->Y = (i2cbuf[2] << 8)| i2cbuf[3];
-	res->Z = (i2cbuf[4] << 8)| i2cbuf[5];
+	res->Z = (i2cbuf[2] << 8)| i2cbuf[3];
+	res->Y = (i2cbuf[4] << 8)| i2cbuf[5];
 
 //	res->X = HMC_GetX();
 //	res->Y = HMC_GetY();

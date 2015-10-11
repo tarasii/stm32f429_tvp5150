@@ -1,8 +1,12 @@
 #include "itg3200.h"
 
-void ITG_Init()
+void ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk)
 {
-	ITG_SetDLPF_Config(ITG_DLPF_256_8);
+//	ITG_SetDLPF_Config(ITG_DLPF_256_8);
+//	ITG_SetSampleRateDivider(7);
+	ITG_SetSampleRateDivider(semp);
+	ITG_SetDLPF(dlpf);
+	ITG_SetPowerManagement(0,0,0,0,0, clk);
 }
 
 
@@ -47,17 +51,17 @@ void ITG_SetSampleRateDivider(uint8_t res)
 	ITG_WriteByte(ITG_Addr_SMPLRT_DIV, res);
 }
 
-ITG_DLPF_TypeDef ITG_GetDLPF_Config()
+ITG_DLPF_TypeDef ITG_GetDLPF()
 {
 	uint8_t res;
 	res = ITG_ReadByte(ITG_Addr_DLPF_FS);
 	return (ITG_DLPF_TypeDef) (res & 7);
 }
 
-void ITG_SetDLPF_Config(ITG_DLPF_TypeDef dlpf)
+void ITG_SetDLPF(ITG_DLPF_TypeDef dlpf)
 {
 	uint8_t tmp;
-	tmp = 0x18 + dlpf;
+	tmp = 0x18 | dlpf;
 	ITG_WriteByte(ITG_Addr_DLPF_FS, tmp);
 }
 
@@ -94,10 +98,16 @@ int16_t ITG_GetTemperature()
   I2C1_WriteBuffer(ITG_READ_ADDRESS, i2cbuf, 1);
 	I2C1_ReadBuffer(ITG_READ_ADDRESS, i2cbuf, 2);
 
-	res = (i2cbuf[0] << 8)| i2cbuf[1];
-//	res = ITG_ReadByte(ITG_Addr_TEMP_OUT_H);
+	res = (i2cbuf[1] << 8)| i2cbuf[0];
+//	res = ITG_ReadByte(ITG_Addr_TEMP_OUT_L);
 //	res = res << 8;
-//	res = res + ITG_ReadByte(ITG_Addr_TEMP_OUT_L);
+//	res = res + ITG_ReadByte(ITG_Addr_TEMP_OUT_H);
+	return res;
+}
+
+int16_t ITG_ConvTemp(int16_t in){
+	int32_t res;
+	res = in  / 7;
 	return res;
 }
 
@@ -174,7 +184,7 @@ void ITG_GetPowerManagement(ITG_PM_StructTypeDef *res)
 	res->CLK   = (ITG_CLK_TypeDef) (res->VAL & 7);	
 }
 
-void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, uint8_t clk)
+void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, ITG_CLK_TypeDef clk)
 {
 	uint8_t tmp;
 	tmp = reset * 0x80 + sleep * 0x40 + stby_x * 0x20 + stby_y * 0x10 + stby_z * 4 + (clk & 7);
@@ -183,11 +193,11 @@ void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bo
 
 void ITG_Reset()
 {
-	ITG_SetPowerManagement(1,0,0,0,0,0);
+	ITG_SetPowerManagement(1,0,0,0,0,ITG_CLK_Internal);
 }
 
 void ITG_Sleep()
 {
-	ITG_SetPowerManagement(0,1,0,0,0,0);
+	ITG_SetPowerManagement(0,1,0,0,0,ITG_CLK_Internal);
 }
 

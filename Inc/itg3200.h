@@ -55,27 +55,10 @@ typedef struct
 	uint8_t VAL;
 }ITG_PM_StructTypeDef; // Power management structure
 
-//typedef enum
-//{
-//  ITG_         = 0x00, /*!<              */
-//  ITG_         = 0x01, /*!<              */
-//  ITG_         = 0x02, /*!<              */
-//  ITG_         = 0x03  /*!<              */
-//}ITG__TypeDef ; // 
-//
-//typedef struct
-//{
-//	__ __;               //
-//	__ __;               //
-//	__ __;         //
-//	uint8_t VAL;
-//}ITG__StructTypeDef; //   structure
-
-
 #define		ITG_WRITE_ADDRESS 0xD0 //AD0 = 0
 //#define	ITG_WRITE_ADDRESS 0xD2 //AD0 = 1
-#define		ITG_READ_ADDRESS 0xD1  //AD0 = 0
-//#define	ITG_READ_ADDRESS 0xD3  //AD0 = 1
+#define		ITG_READ_ADDRESS  0xD1 //AD0 = 0
+//#define	ITG_READ_ADDRESS  0xD3 //AD0 = 1
 
 #define ITG_Addr_WHO_AM_I     0x00 // rw
 #define ITG_Addr_SMPLRT_DIV   0x15 //
@@ -91,18 +74,16 @@ typedef struct
 #define ITG_Addr_GYRO_ZOUT_H  0x21 //
 #define ITG_Addr_GYRO_ZOUT_L  0x22 //
 #define ITG_Addr_PWR_MGM      0x3E // rw
-//#define ITG_Addr_             0x00 //*
 
-
-void ITG_Init(void);
+void ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk);
 void ITG_WriteByte(uint8_t addr, uint8_t data);
 uint8_t ITG_ReadByte(uint8_t addr);
 uint8_t ITG_GetChipAddr(void);
 void ITG_SetChipAddr(uint8_t res);
 uint8_t ITG_GetSampleRateDivider(void);
 void ITG_SetSampleRateDivider(uint8_t res);
-ITG_DLPF_TypeDef ITG_GetDLPF_Config(void);
-void ITG_SetDLPF_Config(ITG_DLPF_TypeDef dlpf);
+ITG_DLPF_TypeDef ITG_GetDLPF(void);
+void ITG_SetDLPF(ITG_DLPF_TypeDef dlpf);
 void ITG_GetIntConfig(ITG_INT_StructTypeDef *res);
 void ITG_SetIntConfig(bool actl, bool open, bool latch, bool any_rd, bool itg_rdy, bool raw_rdy);
 void ITG_GetIntStatus(ITG_INT_StructTypeDef *res);
@@ -112,9 +93,10 @@ int16_t ITG_GetY(void);
 int16_t ITG_GetZ(void);
 void ITG_GetXYZ(ITG_XYZ_StructTypeDef *res);
 void ITG_GetPowerManagement(ITG_PM_StructTypeDef *res);
-void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, uint8_t clk);
+void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, ITG_CLK_TypeDef clk);
 void ITG_Reset(void);
 void ITG_Sleep(void);
+int16_t ITG_ConvTemp(int16_t in);
 
 //Taras Ivaniv
 

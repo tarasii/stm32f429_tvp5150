@@ -3,14 +3,11 @@
 L3GD20_Scale_t L3GD20_INT_Scale;
 
 uint8_t L3GD20_INT_ReadSPI(uint8_t address) {
-	uint8_t data, tmp;
+	uint8_t data;
 	/* CS low */
 	L3GD20_CS_LOW;
 	/* Send address with read command */
-	tmp = address | 0x80;
-	HAL_SPI_Transmit(&hspi5, &tmp, 1, 100);
-	/* Read data */
-	HAL_SPI_Receive(&hspi5, &data, 1, 100);
+  data = SPI_Read(address);
 	/* CS high */
 	L3GD20_CS_HIGH;
 	/* Return data */
@@ -21,18 +18,19 @@ void L3GD20_INT_WriteSPI(uint8_t address, uint8_t data) {
 	/* CS low */
 	L3GD20_CS_LOW;
 	/* Send address with write command */
-	HAL_SPI_Transmit(&hspi5, &address, 1, 100);
-	/* Write data */
-	HAL_SPI_Transmit(&hspi5, &data, 1, 100);
+	SPI_Write(address, data);
 	/* CS high */
 	L3GD20_CS_HIGH;
 }
 
 L3GD20_Result_t L3GD20_Init(L3GD20_Scale_t scale) {
+	uint8_t r;
+	
 	/* Init CS pin */
 	L3GD20_CS_HIGH;
+	r = L3GD20_INT_ReadSPI(L3GD20_REG_WHO_AM_I);
 	/* Check if sensor is L3GD20 */
-	if (L3GD20_INT_ReadSPI(L3GD20_REG_WHO_AM_I) != L3GD20_WHO_AM_I) {
+	if (r != L3GD20_WHO_AM_I) {
 		/* Sensor connected is not L3GD20 */
 		return L3GD20_Result_Error;
 	}

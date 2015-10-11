@@ -141,9 +141,9 @@ typedef struct
 
 typedef struct
 {
-	uint16_t X;    //
-	uint16_t Y;    //
-	uint16_t Z;    //
+	int16_t X;    //
+	int16_t Y;    //
+	int16_t Z;    //
 }ADXL_XYZ_StructTypeDef; //   structure
 
 
@@ -191,12 +191,12 @@ typedef struct
 #define ADXL_Addr_INT_MAP        0x2F // rw
 #define ADXL_Addr_INT_SOURCE     0x30 // r
 #define ADXL_Addr_DATA_FORMAT    0x31 // rw
-#define ADXL_Addr_DATAX0         0x32 // r
-#define ADXL_Addr_DATAX1         0x33 //
-#define ADXL_Addr_DATAY0         0x34 //
-#define ADXL_Addr_DATAY1         0x35 //
-#define ADXL_Addr_DATAZ0         0x36 //
-#define ADXL_Addr_DATAZ1         0x37 //
+#define ADXL_Addr_DATAX_LSB      0x32 // r
+#define ADXL_Addr_DATAX_MSB      0x33 //
+#define ADXL_Addr_DATAY_LSB      0x34 //
+#define ADXL_Addr_DATAY_MSB      0x35 //
+#define ADXL_Addr_DATAZ_LSB      0x36 //
+#define ADXL_Addr_DATAZ_MSB      0x37 //
 #define ADXL_Addr_FIFO_CTL       0x38 //* rw
 #define ADXL_Addr_FIFO_STATUS    0x39 //* r
 //#define ADXL_Addr_             0x00 //*

@@ -3,6 +3,7 @@
 static LCD_typedef LCD;
 
 void GRPH_DrawPixel(uint16_t x, uint16_t y) {
+	if (x > LCD.Width || y > LCD.Height) return;
 	*(__IO uint16_t *) (LCD_FRAME_BUFFER + LCD_PIXEL_SIZE * (y * LCD_PIXEL_WIDTH + x)) = LCD.ForegroundColor;
 }
 

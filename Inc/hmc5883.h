@@ -75,25 +75,25 @@ typedef struct
 }HMC_XYZ_StructTypeDef; //   structure
 
 
-#define		HMC_WRITE_ADDRESS 0x3C 
-#define		HMC_READ_ADDRESS  0x3D  
+#define	HMC_WRITE_ADDRESS 0x3C 
+#define	HMC_READ_ADDRESS  0x3D  
 
 #define HMC_Addr_ConfA      0x00 //* rw
 #define HMC_Addr_ConfB      0x01 //* rw
 #define HMC_Addr_Mode       0x02 //* rw
 #define HMC_Addr_X_MSB      0x03 // r
 #define HMC_Addr_X_LSB      0x04 // r
-#define HMC_Addr_Y_MSB      0x05 // r
-#define HMC_Addr_Y_LSB      0x06 // r
-#define HMC_Addr_Z_MSB      0x07 // r
-#define HMC_Addr_Z_LSB      0x08 // r
+#define HMC_Addr_Z_MSB      0x05 // r
+#define HMC_Addr_Z_LSB      0x06 // r
+#define HMC_Addr_Y_MSB      0x07 // r
+#define HMC_Addr_Y_LSB      0x08 // r
 #define HMC_Addr_Status     0x09 // r
 #define HMC_Addr_IdentA     0x0A // r
 #define HMC_Addr_IdentB     0x0B // r
 #define HMC_Addr_IdentC     0x0C // r
 //#define HMC_Addr_             0x00 //*
 
-void HMC_Init(void);
+void HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain);
 void HMC_WriteByte(uint8_t addr, uint8_t data);
 uint8_t HMC_ReadByte(uint8_t addr);
 void HMC_Get_Configuration(HMC_CF_StructTypeDef *res);

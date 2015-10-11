@@ -497,16 +497,6 @@
               <FilePath>..\Src\graph.c</FilePath>
             </File>
             <File>
-              <FileName>font.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\font.c</FilePath>
-            </File>
-            <File>
-              <FileName>Tahoma24pt.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\Tahoma24pt.c</FilePath>
-            </File>
-            <File>
               <FileName>dma2d.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\dma2d.c</FilePath>
@@ -530,6 +520,16 @@
               <FileName>hmc5883.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\hmc5883.c</FilePath>
+            </File>
+            <File>
+              <FileName>font_7_10.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\font_7_10.c</FilePath>
+            </File>
+            <File>
+              <FileName>sdram.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\sdram.c</FilePath>
             </File>
           </Files>
         </Group>

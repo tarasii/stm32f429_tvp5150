@@ -47,5 +47,6 @@ void GRPH_SetColors(uint32_t Foreground, uint32_t Background);
 uint8_t TGRPH_Putc(char c);
 void GRPH_Puts(char* str);
 void GRPH_Init(void);
+void GRPH_SetForeColor(uint32_t Foreground);
 
 
