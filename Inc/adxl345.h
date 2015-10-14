@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "i2c.h"
+#include "cmtypes.h"
 
 typedef enum
 {                      /*!< Output Data Rate (Hz)  Bandwidth (Hz)  */
@@ -139,12 +140,12 @@ typedef struct
 	uint8_t VAL;
 }ADXL_FC_StructTypeDef; //   structure
 
-typedef struct
-{
-	int16_t X;    //
-	int16_t Y;    //
-	int16_t Z;    //
-}ADXL_XYZ_StructTypeDef; //   structure
+//typedef struct
+//{
+//	int16_t X;    //
+//	int16_t Y;    //
+//	int16_t Z;    //
+//}ADXL_XYZ_StructTypeDef; //   structure
 
 
 //typedef enum
@@ -168,6 +169,8 @@ typedef struct
 #define	ADXL_WRITE_ADDRESS 0xA6 //ALT ADDRESS = 0
 //#define		ADXL_READ_ADDRESS 0x3B  //ALT ADDRESS = 1
 #define	ADXL_READ_ADDRESS 0xA7  //ALT ADDRESS = 0
+
+#define	ADXL_DEVICE_ID 0xE5
 
 #define ADXL_Addr_DEVID          0x00 // r
 #define ADXL_Addr_TAP_THRESH     0x1D // rw
@@ -202,7 +205,7 @@ typedef struct
 //#define ADXL_Addr_             0x00 //*
 
 
-void ADXL_Init(void);
+DEV_Result_t ADXL_Init(void);
 void ADXL_WriteByte(uint8_t addr, uint8_t data);
 uint8_t ADXL_ReadByte(uint8_t addr);
 uint8_t ADXL_GetDeviceId(void);
@@ -252,10 +255,11 @@ void ADXL_SelfTest(void);
 uint16_t ADXL_GetX(void);
 uint16_t ADXL_GetY(void);
 uint16_t ADXL_GetZ(void);
-void ADXL_GetXYZ(ADXL_XYZ_StructTypeDef *res);
+void ADXL_GetXYZ(XYZ_t *res);
 void ADXL_GetFIFO_Status(ADXL_FC_StructTypeDef *res);
 void ADXL_GetFIFO_Control(ADXL_FS_StructTypeDef *res);
 void ADXL_SetFIFO_Control(ADXL_FM_TypeDef fifo_mode, bool trigger, uint8_t samples);
+DEV_Result_t ADXL_TestConnection(void);
 	
 
 

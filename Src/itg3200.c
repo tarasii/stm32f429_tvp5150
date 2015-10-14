@@ -1,12 +1,14 @@
 #include "itg3200.h"
 
-void ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk)
+DEV_Result_t ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk)
 {
 //	ITG_SetDLPF_Config(ITG_DLPF_256_8);
 //	ITG_SetSampleRateDivider(7);
+	if (ITG_TestConnection()) return DEV_Result_Error;
 	ITG_SetSampleRateDivider(semp);
 	ITG_SetDLPF(dlpf);
 	ITG_SetPowerManagement(0,0,0,0,0, clk);
+	return DEV_Result_Ok;
 }
 
 
@@ -156,7 +158,7 @@ int16_t ITG_GetZ()
 	return res;
 }
 
-void ITG_GetXYZ(ITG_XYZ_StructTypeDef *res)
+void ITG_GetXYZ(XYZ_t *res)
 {
 	uint8_t i2cbuf[6];
 	i2cbuf[0] = ITG_Addr_GYRO_XOUT_H;
@@ -201,3 +203,8 @@ void ITG_Sleep()
 	ITG_SetPowerManagement(0,1,0,0,0,ITG_CLK_Internal);
 }
 
+DEV_Result_t ITG_TestConnection()
+{
+	if (ITG_GetChipAddr() == ITG_WHO_AM_I) return DEV_Result_Ok;
+	return DEV_Result_Error;
+}

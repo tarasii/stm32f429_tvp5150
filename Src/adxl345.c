@@ -1,8 +1,10 @@
 #include "adxl345.h"
 
-void ADXL_Init()
+DEV_Result_t ADXL_Init()
 {
+	if (ADXL_TestConnection()) return DEV_Result_Error;
 	ADXL_SetPowerSaving(0,0,1,0,ADXL_WU_8);
+	return DEV_Result_Ok;
 }
 
 
@@ -351,11 +353,11 @@ uint16_t ADXL_GetX()
 {
 	uint16_t res = 0;
 	uint8_t i2cbuf[2];
-	i2cbuf[0] = ADXL_Addr_DATAX0;
+	i2cbuf[0] = ADXL_Addr_DATAX_LSB;
   I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
 	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
 
-	res = (i2cbuf[0] << 8)| i2cbuf[1];
+	res = (i2cbuf[1] << 8)| i2cbuf[0];
 //	res = ADXL_ReadByte(ADXL_Addr_DATAX0);
 //	res = res << 8;
 //	res = res + ADXL_ReadByte(ADXL_Addr_DATAX1);
@@ -366,11 +368,11 @@ uint16_t ADXL_GetY()
 {
 	uint16_t res = 0;
 	uint8_t i2cbuf[2];
-	i2cbuf[0] = ADXL_Addr_DATAY0;
+	i2cbuf[0] = ADXL_Addr_DATAY_LSB;
   I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
 	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
 
-	res = (i2cbuf[0] << 8)| i2cbuf[1];
+	res = (i2cbuf[1] << 8)| i2cbuf[0];
 //	res = ADXL_ReadByte(ADXL_Addr_DATAY0);
 //	res = res << 8;
 //	res = res + ADXL_ReadByte(ADXL_Addr_DATAY1);
@@ -381,27 +383,27 @@ uint16_t ADXL_GetZ()
 {
 	uint16_t res = 0;
 	uint8_t i2cbuf[2];
-	i2cbuf[0] = ADXL_Addr_DATAZ0;
+	i2cbuf[0] = ADXL_Addr_DATAZ_LSB;
   I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
 	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 2);
 
-	res = (i2cbuf[0] << 8)| i2cbuf[1];
+	res = (i2cbuf[1] << 8)| i2cbuf[0];
 //	res = ADXL_ReadByte(ADXL_Addr_DATAZ0);
 //	res = res << 8;
 //	res = res + ADXL_ReadByte(ADXL_Addr_DATAZ1);
 	return res;
 }
 
-void ADXL_GetXYZ(ADXL_XYZ_StructTypeDef *res)
+void ADXL_GetXYZ(XYZ_t *res)
 {
 	uint8_t i2cbuf[6];
-	i2cbuf[0] = ADXL_Addr_DATAX0;
+	i2cbuf[0] = ADXL_Addr_DATAX_LSB;
   I2C1_WriteBuffer(ADXL_READ_ADDRESS, i2cbuf, 1);
 	I2C1_ReadBuffer(ADXL_READ_ADDRESS, i2cbuf, 6);
 
-	res->X = (i2cbuf[0] << 8)| i2cbuf[1];
-	res->Y = (i2cbuf[2] << 8)| i2cbuf[3];
-	res->Z = (i2cbuf[4] << 8)| i2cbuf[5];
+	res->X = (i2cbuf[1] << 8)| i2cbuf[0];
+	res->Y = (i2cbuf[3] << 8)| i2cbuf[2];
+	res->Z = (i2cbuf[5] << 8)| i2cbuf[4];
 //	res->X = ADXL_GetX();
 //	res->Y = ADXL_GetY();
 //	res->Z = ADXL_GetZ();
@@ -430,6 +432,11 @@ void ADXL_SetFIFO_Control(ADXL_FM_TypeDef fifo_mode, bool trigger, uint8_t sampl
 	ADXL_WriteByte(ADXL_Addr_FIFO_CTL, tmp);
 }
 
+DEV_Result_t ADXL_TestConnection()
+{
+	if (ADXL_GetDeviceId() == ADXL_DEVICE_ID) return DEV_Result_Ok;
+	return DEV_Result_Error;
+}
 
 
 

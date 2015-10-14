@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "i2c.h"
+#include "cmtypes.h"
 
 typedef enum
 {                        /*!< Low Pass Filter Bandwidth  Internal Sample Rate  */
@@ -27,12 +28,12 @@ typedef struct
 	uint8_t VAL;
 }ITG_INT_StructTypeDef; //   structure
 
-typedef struct
-{
-	int16_t X;    //
-	int16_t Y;    //
-	int16_t Z;    //
-}ITG_XYZ_StructTypeDef; //   structure
+//typedef struct
+//{
+//	int16_t X;    //
+//	int16_t Y;    //
+//	int16_t Z;    //
+//}ITG_XYZ_StructTypeDef; //   structure
 
 typedef enum
 {
@@ -60,6 +61,8 @@ typedef struct
 #define		ITG_READ_ADDRESS  0xD1 //AD0 = 0
 //#define	ITG_READ_ADDRESS  0xD3 //AD0 = 1
 
+#define		ITG_WHO_AM_I 0xD2 
+
 #define ITG_Addr_WHO_AM_I     0x00 // rw
 #define ITG_Addr_SMPLRT_DIV   0x15 //
 #define ITG_Addr_DLPF_FS      0x16 //
@@ -75,7 +78,7 @@ typedef struct
 #define ITG_Addr_GYRO_ZOUT_L  0x22 //
 #define ITG_Addr_PWR_MGM      0x3E // rw
 
-void ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk);
+DEV_Result_t ITG_Init(ITG_DLPF_TypeDef dlpf, uint8_t semp, ITG_CLK_TypeDef clk);
 void ITG_WriteByte(uint8_t addr, uint8_t data);
 uint8_t ITG_ReadByte(uint8_t addr);
 uint8_t ITG_GetChipAddr(void);
@@ -91,12 +94,13 @@ int16_t ITG_GetTemperature(void);
 int16_t ITG_GetX(void);
 int16_t ITG_GetY(void);
 int16_t ITG_GetZ(void);
-void ITG_GetXYZ(ITG_XYZ_StructTypeDef *res);
+void ITG_GetXYZ(XYZ_t *res);
 void ITG_GetPowerManagement(ITG_PM_StructTypeDef *res);
 void ITG_SetPowerManagement(bool reset, bool sleep, bool stby_x, bool stby_y, bool stby_z, ITG_CLK_TypeDef clk);
 void ITG_Reset(void);
 void ITG_Sleep(void);
 int16_t ITG_ConvTemp(int16_t in);
+DEV_Result_t ITG_TestConnection(void);
 
 //Taras Ivaniv
 

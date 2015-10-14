@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include "i2c.h"
+#include "cmtypes.h"
 
 typedef enum
 {                     /*!< Output Data Rate (Hz)  */
@@ -67,12 +68,12 @@ typedef struct
 	uint8_t VALC;
 }HMC_ID_StructTypeDef; //  Status structure
 
-typedef struct
-{
-	int16_t X;    //
-	int16_t Y;    //
-	int16_t Z;    //
-}HMC_XYZ_StructTypeDef; //   structure
+//typedef struct
+//{
+//	int16_t X;    //
+//	int16_t Y;    //
+//	int16_t Z;    //
+//}HMC_XYZ_StructTypeDef; //   structure
 
 
 #define	HMC_WRITE_ADDRESS 0x3C 
@@ -93,7 +94,7 @@ typedef struct
 #define HMC_Addr_IdentC     0x0C // r
 //#define HMC_Addr_             0x00 //*
 
-void HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain);
+DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain);
 void HMC_WriteByte(uint8_t addr, uint8_t data);
 uint8_t HMC_ReadByte(uint8_t addr);
 void HMC_Get_Configuration(HMC_CF_StructTypeDef *res);
@@ -103,10 +104,10 @@ void HMC_Set_MODE(HMC_MR_TypeDef mode);
 int16_t HMC_GetX(void);
 int16_t HMC_GetY(void);
 int16_t HMC_GetZ(void);
-void HMC_GetXYZ(HMC_XYZ_StructTypeDef *res);
+void HMC_GetXYZ(XYZ_t *res);
 void HMC_GetStatus(HMC_SR_StructTypeDef *res);
 void HMC_GetId(HMC_ID_StructTypeDef *res);
-bool HMC_TestConnection(void);
+DEV_Result_t HMC_TestConnection(void);
 
 //Taras Ivaniv
 

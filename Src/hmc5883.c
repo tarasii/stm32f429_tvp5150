@@ -1,10 +1,12 @@
 #include "hmc5883.h"
 
-void HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain)
+DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain)
 {
 	//HMC_Set_Configurarion(HMC_DR_15, HMC_MR_SMM, HMC_GS_1_9);
+	if (HMC_TestConnection()) return DEV_Result_Error;
 	HMC_Set_Configurarion(rate, moder, gain);
 	HMC_Set_MODE(mode);
+	return DEV_Result_Ok;
 }
 
 
@@ -103,7 +105,7 @@ int16_t HMC_GetZ()
 	return res;
 }
 
-void HMC_GetXYZ(HMC_XYZ_StructTypeDef *res)
+void HMC_GetXYZ(XYZ_t *res)
 {
 	uint8_t i2cbuf[6];
 	i2cbuf[0] = HMC_Addr_X_MSB;
@@ -143,12 +145,12 @@ void HMC_GetId(HMC_ID_StructTypeDef *res)
 //	res->VALC  = HMC_ReadByte(HMC_Addr_IdentC);
 }
 
-bool HMC_TestConnection()
+DEV_Result_t HMC_TestConnection()
 {
 	HMC_ID_StructTypeDef res;
 	HMC_GetId(&res);
-	if (res.VALA == 'H' && res.VALB == '4' && res.VALB == '3' ) return true;
-	return false;
+	if (res.VALA == 'H' && res.VALB == '4' && res.VALB == '3' ) return DEV_Result_Ok;
+	return DEV_Result_Error;
 }
 
 

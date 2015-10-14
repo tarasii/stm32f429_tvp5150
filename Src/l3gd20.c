@@ -23,17 +23,10 @@ void L3GD20_INT_WriteSPI(uint8_t address, uint8_t data) {
 	L3GD20_CS_HIGH;
 }
 
-L3GD20_Result_t L3GD20_Init(L3GD20_Scale_t scale) {
+DEV_Result_t L3GD20_Init(L3GD20_Scale_t scale) {
 	uint8_t r;
 	
-	/* Init CS pin */
-	L3GD20_CS_HIGH;
-	r = L3GD20_INT_ReadSPI(L3GD20_REG_WHO_AM_I);
-	/* Check if sensor is L3GD20 */
-	if (r != L3GD20_WHO_AM_I) {
-		/* Sensor connected is not L3GD20 */
-		return L3GD20_Result_Error;
-	}
+	if (ITG_TestConnection()) return DEV_Result_Error;
 
 	/* Enable L3GD20 Power bit */
 	L3GD20_INT_WriteSPI(L3GD20_REG_CTRL_REG1, 0xFF);
@@ -57,10 +50,10 @@ L3GD20_Result_t L3GD20_Init(L3GD20_Scale_t scale) {
 	L3GD20_INT_WriteSPI(L3GD20_REG_CTRL_REG5, 0x10);
 	
 	/* Everything OK */
-	return L3GD20_Result_Ok;
+	return DEV_Result_Ok;
 }
 
-L3GD20_Result_t L3GD20_Read(L3GD20_t* L3DG20_Data) {
+DEV_Result_t L3GD20_Read(XYZ_t* L3DG20_Data) {
 	float temp, s;
 	
 	/* Read X axis */
@@ -95,9 +88,18 @@ L3GD20_Result_t L3GD20_Read(L3GD20_t* L3DG20_Data) {
 	L3DG20_Data->Z = (int16_t) temp;
 	
 	/* Return OK */
-	return L3GD20_Result_Ok;
+	return DEV_Result_Ok;
 }
 
 
+DEV_Result_t L3GD20_TestConnection()
+{
+	L3GD20_CS_HIGH;
+	/* Check if sensor is L3GD20 */
+	if (L3GD20_INT_ReadSPI(L3GD20_REG_WHO_AM_I) != L3GD20_WHO_AM_I) {
+		/* Sensor connected is not L3GD20 */
+		return DEV_Result_Error;
+	}
+}
 
 
