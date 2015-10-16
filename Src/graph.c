@@ -83,6 +83,7 @@ void GRPH_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 		int16_t error2 = 0 ;
     int16_t error  = deltaX - deltaY;
     
+    //GRPH_DrawPixel(x1, y1);
     GRPH_DrawPixel(x2, y2);
     while(x1 != x2 || y1 != y2) {
         GRPH_DrawPixel(x1, y1);
@@ -99,6 +100,36 @@ void GRPH_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
     }
 }
 
+//void GRPH_DrawVector(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t rad)
+//{
+//    const uint16_t deltaX = ABS(x2 - x1);
+//    const uint16_t deltaY = ABS(y2 - y1);
+//    const int16_t signX = x1 < x2 ? 1 : -1;
+//    const int16_t signY = y1 < y2 ? 1 : -1;
+//    
+//		int16_t error2 = 0 ;
+//		uint16_t cnt = 0 ;
+//    int16_t error  = deltaX - deltaY;
+//    
+//    //GRPH_DrawPixel(x2, y2);
+//    while(x1 != x2 || y1 != y2) {
+//        GRPH_DrawPixel(x1, y1);
+//        error2 = error * 2;
+//        
+//        if(error2 > -deltaY) {
+//            error -= deltaY;
+//            x1 += signX;
+//        }
+//        if(error2 < deltaX) {
+//            error += deltaX;
+//            y1 += signY;
+//        }
+//				cnt++;
+//				
+//				if (cnt > rad) return;
+//    }
+//}
+
 void GRPH_SetXY(uint16_t X, uint16_t Y) {
 	if (X >= LCD.Width || Y >= LCD.Height) {
 		return;
@@ -114,6 +145,10 @@ void GRPH_SetColors(uint32_t Foreground, uint32_t Background) {
 
 void GRPH_SetForeColor(uint32_t Foreground) {
 	LCD.ForegroundColor = Foreground;
+}
+
+uint32_t GRPH_GetForeColor() {
+	return LCD.ForegroundColor;
 }
 
 void GRPH_Init() {

@@ -149,7 +149,7 @@ DEV_Result_t HMC_TestConnection()
 {
 	HMC_ID_StructTypeDef res;
 	HMC_GetId(&res);
-	if (res.VALA == 'H' && res.VALB == '4' && res.VALB == '3' ) return DEV_Result_Ok;
+	if (res.VALA == 'H' && res.VALB == '4' && res.VALC == '3' ) return DEV_Result_Ok;
 	return DEV_Result_Error;
 }
 

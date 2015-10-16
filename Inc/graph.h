@@ -1,3 +1,6 @@
+#ifndef __graph_H
+#define __graph_H
+
 #include "stdint.h"
 #include "font_7_10.h"
 #include "lcd.h"
@@ -42,11 +45,17 @@ void GRPH_DrawRect(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void DMA2DGRPH_Fill(void);
 void GRPH_DrawCircle(uint16_t x0, uint16_t y0, uint16_t rad);
 void GRPH_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
+//void GRPH_DrawVector(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t rad);
 void GRPH_SetXY(uint16_t X, uint16_t Y);
 void GRPH_SetColors(uint32_t Foreground, uint32_t Background);
 uint8_t TGRPH_Putc(char c);
 void GRPH_Puts(char* str);
 void GRPH_Init(void);
 void GRPH_SetForeColor(uint32_t Foreground);
+uint32_t GRPH_GetForeColor(void);
 
+
+//Taras Ivaniv
+
+#endif /*__ graph_H */
 

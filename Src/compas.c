@@ -4,10 +4,14 @@ int16_t old_x = 0;
 int16_t old_y = 0;
 
 void DrawCompasLine(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_t y){
-  int16_t xn = rad - 2;
+  int16_t xn = 0;
   int16_t yn = 0;
-  int16_t yc = 0;
-	int16_t en = 1 - xn;	
+  int16_t yc = rad;
+ 
+	int16_t xs = 0;
+  int16_t ys = 0;
+  int16_t yz = rad;
+
 	int16_t ax = ABS(x);	
 	int16_t ay = ABS(y);
   if (ay > ax){
@@ -15,42 +19,82 @@ void DrawCompasLine(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_t y
 		ax = ABS(y);
 	}	
     
-	while(xn >= yn) {
-			yn++;
-			if(en <= 0) {
-					en += 2 * yn + 1;
-			} else {
-					xn--;
-					en += 2 * (yn - xn) + 1;
-			}	
-	}
-	
+  OnCircleIterationsXY(&xn, &yn, rad-2, yc);	
 	yc = (ay * yn)/ax;
+	OnCircleIterationsXY(&xn, &yn, rad-2, yc);	
+
+  OnCircleIterationsXY(&xs, &ys, rad/5, yz);	
+	yz = (ay * ys)/ax;
+	OnCircleIterationsXY(&xs, &ys, rad/5, yz);	
+
 	
-  xn = rad - 2;
-  yn = 0;
-	while(xn >= yn && yc >= yn) {
-			yn++;
-			if(en <= 0) {
-					en += 2 * yn + 1;
-			} else {
-					xn--;
-					en += 2 * (yn - xn) + 1;
-			}	
+	if (x >= 0 && y >= 0 && x >= y){
+		GRPH_DrawLine(x0, y0, x0 + xn, y0 - yn);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 + ys, y0 + xs);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 + xn, y0 - yn);
+		GRPH_DrawLine(x0 + xn, y0 - yn, x0 + ys, y0 + xs);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 - xn, y0 + yn);
+		GRPH_DrawLine(x0 - xn, y0 + yn, x0 + ys, y0 + xs);
 	}
-	
-	if (x >= 0 && y >= 0 && x >= y)  GRPH_DrawLine(x0, y0, x0 + xn, y0 - yn);
-	if (x >= 0 && y >= 0 && x < y)  GRPH_DrawLine(x0, y0, x0 + yn, y0 - xn);
-	if (x < 0 && y >= 0 && ABS(x) >= y)  GRPH_DrawLine(x0, y0, x0 - xn, y0 - yn);
-	if (x < 0 && y >= 0 && ABS(x) < y)  GRPH_DrawLine(x0, y0, x0 - yn, y0 - xn);
-	if (x >= 0 && y < 0 && x >= ABS(y))  GRPH_DrawLine(x0, y0, x0 + xn, y0 + yn);
-	if (x >= 0 && y < 0 && x < ABS(y))  GRPH_DrawLine(x0, y0, x0 + yn, y0 + xn);
-	if (x < 0 && y < 0 && ABS(x) >= ABS(y))  GRPH_DrawLine(x0, y0, x0 - xn, y0 + yn);
-	if (x < 0 && y < 0 && ABS(x) < ABS(y))  GRPH_DrawLine(x0, y0, x0 - yn, y0 + xn);
+	if (x >= 0 && y >= 0 && x < y){
+		GRPH_DrawLine(x0, y0, x0 + yn, y0 - xn);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 + xs, y0 + ys);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 + yn, y0 - xn);
+		GRPH_DrawLine(x0 + yn, y0 - xn, x0 + xs, y0 + ys);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 - yn, y0 + xn);
+		GRPH_DrawLine(x0 - yn, y0 + xn, x0 + xs, y0 + ys);
+	}
+	if (x < 0 && y >= 0 && ABS(x) >= y){
+		GRPH_DrawLine(x0, y0, x0 - xn, y0 - yn);
+		GRPH_DrawLine(x0 - ys, y0 + xs, x0 + ys, y0 - xs);
+		GRPH_DrawLine(x0 - ys, y0 + xs, x0 - xn, y0 - yn);
+		GRPH_DrawLine(x0 - xn, y0 - yn, x0 + ys, y0 - xs);
+		GRPH_DrawLine(x0 - ys, y0 + xs, x0 + xn, y0 + yn);
+		GRPH_DrawLine(x0 + xn, y0 + yn, x0 + ys, y0 - xs);
+	}
+	if (x < 0 && y >= 0 && ABS(x) < y){
+		GRPH_DrawLine(x0, y0, x0 - yn, y0 - xn);
+		GRPH_DrawLine(x0 - xs, y0 + ys, x0 + xs, y0 - ys);
+		GRPH_DrawLine(x0 - xs, y0 + ys, x0 - yn, y0 - xn);
+		GRPH_DrawLine(x0 - yn, y0 - xn, x0 + xs, y0 - ys);
+		GRPH_DrawLine(x0 - xs, y0 + ys, x0 + yn, y0 + xn);
+		GRPH_DrawLine(x0 + yn, y0 + xn, x0 + xs, y0 - ys);
+	}
+	if (x >= 0 && y < 0 && x >= ABS(y)){
+		GRPH_DrawLine(x0, y0, x0 + xn, y0 + yn);
+		GRPH_DrawLine(x0 + ys, y0 - xs, x0 - ys, y0 + xs);
+		GRPH_DrawLine(x0 + ys, y0 - xs, x0 + xn, y0 + yn);
+		GRPH_DrawLine(x0 + xn, y0 + yn, x0 - ys, y0 + xs);
+		GRPH_DrawLine(x0 + ys, y0 - xs, x0 - xn, y0 - yn);
+		GRPH_DrawLine(x0 - xn, y0 - yn, x0 - ys, y0 + xs);
+	}
+	if (x >= 0 && y < 0 && x < ABS(y)){
+		GRPH_DrawLine(x0, y0, x0 + yn, y0 + xn);
+		GRPH_DrawLine(x0 + xs, y0 - ys, x0 - xs, y0 + ys);
+		GRPH_DrawLine(x0 + xs, y0 - ys, x0 + yn, y0 + xn);
+		GRPH_DrawLine(x0 + yn, y0 + xn, x0 - xs, y0 + ys);
+		GRPH_DrawLine(x0 + xs, y0 - ys, x0 - yn, y0 - xn);
+		GRPH_DrawLine(x0 - yn, y0 - xn, x0 - xs, y0 + ys);
+	}
+	if (x < 0 && y < 0 && ABS(x) >= ABS(y)){
+		GRPH_DrawLine(x0, y0, x0 - xn, y0 + yn);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 + ys, y0 + xs);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 - xn, y0 + yn);
+		GRPH_DrawLine(x0 - xn, y0 + yn, x0 + ys, y0 + xs);
+		GRPH_DrawLine(x0 - ys, y0 - xs, x0 + xn, y0 - yn);
+		GRPH_DrawLine(x0 + xn, y0 - yn, x0 + ys, y0 + xs);
+	}
+	if (x < 0 && y < 0 && ABS(x) < ABS(y)){
+		GRPH_DrawLine(x0, y0, x0 - yn, y0 + xn);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 + xs, y0 + ys);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 - yn, y0 + xn);
+		GRPH_DrawLine(x0 - yn, y0 + xn, x0 + xs, y0 + ys);
+		GRPH_DrawLine(x0 - xs, y0 - ys, x0 + yn, y0 - xn);
+		GRPH_DrawLine(x0 + yn, y0 - xn, x0 + xs, y0 + ys);
+	}
 }
 
 void DrawCompas(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_t y){
-	//GRPH_DrawCircle(22,297,20);
 	GRPH_DrawCircle(x0, y0, rad);
 	GRPH_SetForeColor(GRPH_COLOR_BLACK);
 	DrawCompasLine(x0,y0,rad,old_x,old_y);
@@ -58,14 +102,5 @@ void DrawCompas(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_t y){
 	DrawCompasLine(x0,y0,rad,x,y);
 	old_x = x;
 	old_y = y;
-//	//sm
-//	GRPH_DrawLine(x0-4, y0, x0+4, y0);
-//	//up
-//	GRPH_DrawLine(x0, y0-rad+2, x0-4, y0);
-//	GRPH_DrawLine(x0, y0-rad+2, x0+4, y0);
-//	//down
-//	GRPH_DrawLine(x0, y0+rad-2, x0-4, y0);
-//	GRPH_DrawLine(x0, y0+rad-2, x0+4, y0);
-//	GRPH_DrawLine(x0, y0+rad-2, x0, y0);
 }
 
