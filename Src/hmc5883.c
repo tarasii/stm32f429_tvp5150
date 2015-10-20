@@ -1,10 +1,10 @@
 #include "hmc5883.h"
 
-DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain)
+DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain, HMC_SS_TypeDef sample)
 {
 	//HMC_Set_Configurarion(HMC_DR_15, HMC_MR_SMM, HMC_GS_1_9);
 	if (HMC_TestConnection()) return DEV_Result_Error;
-	HMC_Set_Configurarion(rate, moder, gain);
+	HMC_Set_Configurarion(rate, moder, gain, sample);
 	HMC_Set_MODE(mode);
 	return DEV_Result_Ok;
 }
@@ -29,17 +29,18 @@ uint8_t HMC_ReadByte(uint8_t addr)
 
 void HMC_Get_Configuration(HMC_CF_StructTypeDef *res)
 {
-	res->VAL1 = HMC_ReadByte(HMC_Addr_ConfA);
-	res->RATE = (HMC_DR_TypeDef) ((res->VAL1 >> 2) & 7);
-	res->MODE = (HMC_MM_TypeDef)  (res->VAL1       & 3);
-	res->VAL2 = HMC_ReadByte(HMC_Addr_ConfA);
-	res->GAIN = (HMC_GS_TypeDef) ((res->VAL2 >> 5) & 7);
+	res->VAL1   = HMC_ReadByte(HMC_Addr_ConfA);
+	res->SAMPLE = (HMC_SS_TypeDef) ((res->VAL1 >> 5) & 3);
+	res->RATE   = (HMC_DR_TypeDef) ((res->VAL1 >> 2) & 7);
+	res->MODE   = (HMC_MM_TypeDef)  (res->VAL1       & 3);
+	res->VAL2   = HMC_ReadByte(HMC_Addr_ConfA);
+	res->GAIN   = (HMC_GS_TypeDef) ((res->VAL2 >> 5) & 7);
 }
 
-void HMC_Set_Configurarion(HMC_DR_TypeDef rate, HMC_MM_TypeDef mode, HMC_GS_TypeDef gain)
+void HMC_Set_Configurarion(HMC_DR_TypeDef rate, HMC_MM_TypeDef mode, HMC_GS_TypeDef gain, HMC_SS_TypeDef sample)
 {
 	uint8_t tmp = 0;
-	tmp = (rate & 7) * 4 + (mode & 3);
+	tmp = (sample & 3) * 0x20 + (rate & 7) * 4 + (mode & 3);
 	HMC_WriteByte(HMC_Addr_ConfA, tmp);
 	tmp = 0;
 	tmp = (gain & 7) * 0x20;

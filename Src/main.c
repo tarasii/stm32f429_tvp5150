@@ -47,6 +47,13 @@
 #include "svga050.h"
 #include "graph.h"
 #include "itg3200.h"
+#include "graph.h"
+#include "hmc5883.h"
+#include "adxl345.h"
+#include "compas.h"
+#include "clinometer.h"
+#include "guage.h"
+
 
 /* USER CODE END Includes */
 
@@ -54,7 +61,7 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-char str[] = "Hello word!";
+char bufStr[50] = "";
 
 /* USER CODE END PV */
 
@@ -74,7 +81,10 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-	ITG_XYZ_StructTypeDef lxyz;
+  ITG_XYZ_StructTypeDef ixyz;
+  uint32_t cur_tick, tmp_tick;
+  HMC_ID_StructTypeDef hres;
+  uint8_t r, temp;
 
   /* USER CODE END 1 */
 
@@ -105,20 +115,21 @@ int main(void)
 	//ILI9341_Init();
 	GRPH_Init();
 	
-	ITG_Init();
+	HMC_Init(HMC_MR_CMM, HMC_DR_15, HMC_MM_Normal, HMC_GS_4_0, HMC_SS_1);
+	ITG_Init(ITG_DLPF_20_1, 0, ITG_CLK_GyroX);
+	ADXL_Init();
 
 	HAL_LTDC_SetAlpha(&hltdc, 255, 0);
 	HAL_LTDC_SetAlpha(&hltdc, 0, 1);
 	
 	DMA2DGRPH_Fill();
 
-	GRPH_DrawRect(0,0,239,319);
-	GRPH_DrawLine(0,0,239,319);
-	GRPH_DrawLine(239,0,0,319);
-	GRPH_DrawCircle(120,160,60);
+	DrawCompas(22, 297, 20, 0, 0);
+	DrawClinometer(64, 297, 20, 0, 0);
+	DrawGuageAbsolut(88, 297, 20, 100, 0, GRPH_COLOR_RED);	
 
-	GRPH_SetXY(100, 150);
-	GRPH_Puts(str);
+	//GRPH_SetXY(100, 150);
+	//GRPH_Puts(str);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -128,13 +139,38 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-		ITG_GetXYZ(&lxyz);
+	cur_tick = HAL_GetTick();
+	if (cur_tick - tmp_tick > 200){
+
+		r = ITG_GetChipAddr();
+		ITG_GetXYZ(&ixyz);
+		temp = ITG_GetTemperature();
+		temp = ITG_ConvTemp(temp);
+		sprintf(bufStr, "%02x %6d; %6d; %6d; %3d", r, ixyz.X, ixyz.Y, ixyz.Z, temp);		
+		GRPH_SetXY(2, 3);
+		GRPH_Puts(bufStr);
+			
+			
+		HMC_GetId(&hres);
+		HMC_GetXYZ(&ixyz);
+		sprintf(bufStr, "%c%c%c %5d; %6d; %6d", hres.VALA, hres.VALB, hres.VALC, ixyz.X, ixyz.Y, ixyz.Z);		
+		GRPH_SetXY(2, 14);
+		GRPH_Puts(bufStr);
+    		DrawCompas(22, 297, 20, ixyz.X, ixyz.Y);
+						
+		r = ADXL_GetDeviceId();
+		ADXL_GetXYZ(&ixyz);
+		sprintf(bufStr, "%x %6d; %6d; %6d", r, ixyz.X, ixyz.Y, ixyz.Z);		
+		GRPH_SetXY(2, 38);
+		GRPH_Puts(bufStr);
+		DrawClinometer(64, 297, 20, ixyz.Y, ixyz.Y);
+			
+			
+		GPIO_TOGGLE(GPIOG, GPIO_PIN_13);
+		tmp_tick = cur_tick;
+	}
 		
-		sprintf(str, "%d; %d; %d;", lxyz.X, lxyz.Y, lxyz.Z);		
-		GRPH_SetXY(10, 10);
-		GRPH_Puts(str);
-		
-		HAL_Delay(100);
+	//HAL_Delay(100);
 		
 
   }

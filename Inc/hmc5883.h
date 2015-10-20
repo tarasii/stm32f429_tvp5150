@@ -44,11 +44,20 @@ typedef enum
   HMC_GS_7_9 = 0x07  /*!<        ± 7.9 Ga               219   */
 }HMC_GS_TypeDef ;    // Gain settings 
 
+typedef enum
+{                  /*!<        */
+  HMC_SS_1 = 0x00, /*!<    1   */
+  HMC_SS_2 = 0x01, /*!<    2   */
+  HMC_SS_4 = 0x02, /*!<    4   */
+  HMC_SS_8 = 0x03  /*!<    8   */
+}HMC_SS_TypeDef ;  // Number of samples
+
 typedef struct
 {
 	HMC_DR_TypeDef RATE; //
 	HMC_MM_TypeDef MODE; //
 	HMC_GS_TypeDef GAIN; //
+  HMC_SS_TypeDef SAMPLE;
 	uint8_t VAL1;
 	uint8_t VAL2;
 }HMC_CF_StructTypeDef; //  Configuration structure
@@ -94,11 +103,11 @@ typedef struct
 #define HMC_Addr_IdentC     0x0C // r
 //#define HMC_Addr_             0x00 //*
 
-DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain);
+DEV_Result_t HMC_Init(HMC_MR_TypeDef mode, HMC_DR_TypeDef rate, HMC_MM_TypeDef moder, HMC_GS_TypeDef gain, HMC_SS_TypeDef sample);
 void HMC_WriteByte(uint8_t addr, uint8_t data);
 uint8_t HMC_ReadByte(uint8_t addr);
 void HMC_Get_Configuration(HMC_CF_StructTypeDef *res);
-void HMC_Set_Configurarion(HMC_DR_TypeDef rate, HMC_MM_TypeDef mode, HMC_GS_TypeDef gain);
+void HMC_Set_Configurarion(HMC_DR_TypeDef rate, HMC_MM_TypeDef mode, HMC_GS_TypeDef gain, HMC_SS_TypeDef sample);
 HMC_MR_TypeDef HMC_Get_Mode(void);
 void HMC_Set_MODE(HMC_MR_TypeDef mode);
 int16_t HMC_GetX(void);

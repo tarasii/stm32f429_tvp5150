@@ -37,7 +37,7 @@ void DrawGuageAbsolut(uint16_t x0, uint16_t y0, uint16_t rad, uint16_t x, uint16
 	if (ax > 256) ax = 256;
 	ax = ax * 2 * rad / 256;
 	GRPH_SetForeColor(GRPH_COLOR_BLACK);
-	GRPH_DrawLine(x0    , y0 - rad + 1, x0    , y0 + rad - 1 - ax);
+	GRPH_DrawLine(x0    , y0 + rad - 1, x0    , y0 + rad - 1 - ax);
 	GRPH_DrawLine(x0 + 1, y0 + rad - 1, x0 + 1, y0 + rad - 1 - ax);
 	GRPH_DrawLine(x0 - 1, y0 + rad - 1, x0 - 1, y0 + rad - 1 - ax);
 	//
@@ -45,7 +45,7 @@ void DrawGuageAbsolut(uint16_t x0, uint16_t y0, uint16_t rad, uint16_t x, uint16
 	if (ax > 256) ax = 256;
 	ax = ax * 2 * rad / 256;
 	GRPH_SetForeColor(color);
-	GRPH_DrawLine(x0    , y0 - rad + 1, x0    , y0 + rad - 1 - ax);
+	GRPH_DrawLine(x0    , y0 + rad - 1, x0    , y0 + rad - 1 - ax);
 	GRPH_DrawLine(x0 + 1, y0 + rad - 1, x0 + 1, y0 + rad - 1 - ax);
 	GRPH_DrawLine(x0 - 1, y0 + rad - 1, x0 - 1, y0 + rad - 1 - ax);
 	GRPH_SetForeColor(tmp);
