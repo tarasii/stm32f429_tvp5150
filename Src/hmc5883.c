@@ -33,7 +33,7 @@ void HMC_Get_Configuration(HMC_CF_StructTypeDef *res)
 	res->SAMPLE = (HMC_SS_TypeDef) ((res->VAL1 >> 5) & 3);
 	res->RATE   = (HMC_DR_TypeDef) ((res->VAL1 >> 2) & 7);
 	res->MODE   = (HMC_MM_TypeDef)  (res->VAL1       & 3);
-	res->VAL2   = HMC_ReadByte(HMC_Addr_ConfA);
+	res->VAL2   = HMC_ReadByte(HMC_Addr_ConfB);
 	res->GAIN   = (HMC_GS_TypeDef) ((res->VAL2 >> 5) & 7);
 }
 
@@ -70,9 +70,6 @@ int16_t HMC_GetX()
 	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
 
 	res = (i2cbuf[0] << 8)| i2cbuf[1];
-//	res = HMC_ReadByte(HMC_Addr_X_MSB);
-//	res = res << 8;
-//	res = res + HMC_ReadByte(HMC_Addr_X_LSB);
 	return res;
 }
 
@@ -85,9 +82,6 @@ int16_t HMC_GetY()
 	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
 
 	res = (i2cbuf[0] << 8)| i2cbuf[1];
-//	res = HMC_ReadByte(HMC_Addr_Y_MSB);
-//	res = res << 8;
-//	res = res + HMC_ReadByte(HMC_Addr_Y_LSB);
 	return res;
 }
 
@@ -100,9 +94,6 @@ int16_t HMC_GetZ()
 	I2C1_ReadBuffer(HMC_READ_ADDRESS, i2cbuf, 2);
 
 	res = (i2cbuf[0] << 8)| i2cbuf[1];
-//	res = HMC_ReadByte(HMC_Addr_Z_MSB);
-//	res = res << 8;
-//	res = res + HMC_ReadByte(HMC_Addr_Z_LSB);
 	return res;
 }
 
