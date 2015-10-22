@@ -100,6 +100,34 @@ void GRPH_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
     }
 }
 
+void GRPH_DrawFilledTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3)
+{
+    const uint16_t deltaX = ABS(x2 - x1);
+    const uint16_t deltaY = ABS(y2 - y1);
+    const int16_t signX = x1 < x2 ? 1 : -1;
+    const int16_t signY = y1 < y2 ? 1 : -1;
+    
+		int16_t error2 = 0 ;
+    int16_t error  = deltaX - deltaY;
+    
+    //GRPH_DrawPixel(x1, y1);
+    //GRPH_DrawPixel(x2, y2);
+		GRPH_DrawLine(x2, y2, x3, y3);
+    while(x1 != x2 || y1 != y2) {
+				GRPH_DrawLine(x1, y1, x3, y3);
+        error2 = error * 2;
+        
+        if(error2 > -deltaY) {
+            error -= deltaY;
+            x1 += signX;
+        }
+        if(error2 < deltaX) {
+            error += deltaX;
+            y1 += signY;
+        }
+    }
+}
+
 //void GRPH_DrawVector(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t rad)
 //{
 //    const uint16_t deltaX = ABS(x2 - x1);

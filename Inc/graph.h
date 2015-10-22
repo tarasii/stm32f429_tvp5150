@@ -53,6 +53,7 @@ void GRPH_Puts(char* str);
 void GRPH_Init(void);
 void GRPH_SetForeColor(uint32_t Foreground);
 uint32_t GRPH_GetForeColor(void);
+void GRPH_DrawFilledTriangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3);
 
 
 //Taras Ivaniv
