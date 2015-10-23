@@ -10,40 +10,46 @@ void DrawClinometrLine(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_
   int16_t yc = rad;
   int16_t xc = rad;
 	
-	int16_t ax = x;	
-	int16_t ay = ABS(y);	
+	int16_t bx = ABS(x);	
+	int16_t by = -y;	
 	
-  if (ay > 256) ay = 256;
-  if (ax > 128) ax = 128;
-  if (ax < -128) ax = -128;
 	
-  OnCircleIterationsXY(&xn, &yn, 2*rad/3, yc);	
+  if (bx > 256) bx = 256;
+  if (bx < -256) bx = -256;
 	
-  if (ay > 128) yc = ((256 - ay) * yn)/128;
-	else yc = (ay * yn)/128;
-	xc = (ax * rad/2) /128;
+  if (by > 128) by = 128;
+  if (by < -128) by = -128;
 	
-  OnCircleIterationsXY(&xn, &yn, 2*rad/3, yc);	
+  OnCircleIterationsXY(&xn, &yn, 2*rad/3, xc);	
 	
-	if (y >= 0 && y >= 128 ) {
+  if (bx > 128) xc = ((256 - bx) * yn)/128;
+	else xc = (bx * yn)/128;
+//  if (bx < -128) xc = ((-256 - bx) * yn)/128;
+//	else xc = (bx * yn)/128;
+	
+	yc = (by * rad/2) /128;
+	
+  OnCircleIterationsXY(&xn, &yn, 2*rad/3, xc);	
+	
+	if (x >= 0 && x >= 128 ) {
 //		GRPH_DrawLine(x0 - xn, y0 - yn, x0 + xn, y0 + yn); 
-		GRPH_DrawLine(x0 + yn, y0 - xn + xc, x0 - yn, y0 + xn + xc); 
-		GRPH_DrawLine(x0     , y0      + xc, x0 + xn, y0 + yn + xc); 
+		GRPH_DrawLine(x0 - yn, y0 - xn + yc, x0 + yn, y0 + xn + yc); 
+		GRPH_DrawLine(x0     , y0      + yc, x0 - xn, y0 + yn + yc); 
 	}
-	if (y >= 0 && y < 128)  {
+	if (x >= 0 && x < 128)  {
 		//GRPH_DrawLine(x0 + yn, y0 + xn, x0 - yn, y0 - xn);
-		GRPH_DrawLine(x0 + yn, y0 + xn + xc, x0     , y0      + xc);
-		GRPH_DrawLine(x0 - xn, y0 + yn + xc, x0 + xn, y0 - yn + xc);
+		GRPH_DrawLine(x0 - yn, y0 + xn + yc, x0     , y0      + yc);
+		GRPH_DrawLine(x0 + xn, y0 + yn + yc, x0 - xn, y0 - yn + yc);
 	}
-	if (y < 0 && y < -128)  {
+	if (x < 0 && x < -128)  {
 //		GRPH_DrawLine(x0 + xn, y0 - yn, x0 - xn, y0 + yn);
-		GRPH_DrawLine(x0 - yn, y0 - xn + xc, x0 + yn, y0 + xn + xc);
-		GRPH_DrawLine(x0     , y0      + xc, x0 - xn, y0 + yn + xc);
+		GRPH_DrawLine(x0 + yn, y0 - xn + yc, x0 - yn, y0 + xn + yc);
+		GRPH_DrawLine(x0     , y0      + yc, x0 + xn, y0 + yn + yc);
 	}
-	if (y < 0 && y >= -128)  {
+	if (x < 0 && x >= -128)  {
 		//GRPH_DrawLine(x0 - yn, y0 + xn, x0 + yn, y0 - xn);
-		GRPH_DrawLine(x0 - yn, y0 + xn + xc, x0     , y0      + xc);
-		GRPH_DrawLine(x0 + xn, y0 + yn + xc, x0 - xn, y0 - yn + xc);
+		GRPH_DrawLine(x0 + yn, y0 + xn + yc, x0     , y0      + yc);
+		GRPH_DrawLine(x0 - xn, y0 + yn + yc, x0 + xn, y0 - yn + yc);
 	}
 }
 
@@ -72,7 +78,7 @@ void DrawClinometer(uint16_t x0, uint16_t y0, uint16_t rad, int16_t x, int16_t y
 	GRPH_SetForeColor(GRPH_COLOR_BLACK);
 	DrawClinometrLine(x0, y0, rad, oldc_x, oldc_y);
 	GRPH_SetForeColor(GRPH_COLOR_WHITE);
-	if (ABS(y) < 5 ) GRPH_SetForeColor(GRPH_COLOR_GREEN);
+	if (ABS(x) < 5 ) GRPH_SetForeColor(GRPH_COLOR_GREEN);
 	DrawClinometrLine(x0, y0, rad, x, y);
 	GRPH_SetForeColor(GRPH_COLOR_WHITE);
 	oldc_x = x;

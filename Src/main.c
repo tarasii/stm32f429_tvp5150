@@ -62,6 +62,7 @@
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 char bufStr[50] = "";
+const char *directions[17]={"N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW","N"};
 
 /* USER CODE END PV */
 
@@ -85,6 +86,8 @@ int main(void)
   uint32_t cur_tick, tmp_tick;
   HMC_ID_StructTypeDef hres;
   uint8_t r, temp;
+  int32_t tmp;
+  float angl;
 
   /* USER CODE END 1 */
 
@@ -158,6 +161,13 @@ int main(void)
 		GRPH_Puts(bufStr);
     		DrawCompas(22, 297, 20, ixyz.X, ixyz.Y);
 						
+		angl = 270 + atan2(ixyz.Y, ixyz.X) * 180 /3.14;
+		if (angl > 360) angl -= 360;
+		tmp = (angl + 11)/22.5;
+		sprintf(bufStr, "%4.1f %s      ", angl, directions[tmp]);		
+		GRPH_SetXY(2, 180);
+		GRPH_Puts(bufStr);
+
 		r = ADXL_GetDeviceId();
 		ADXL_GetXYZ(&ixyz);
 		sprintf(bufStr, "%x %6d; %6d; %6d", r, ixyz.X, ixyz.Y, ixyz.Z);		
