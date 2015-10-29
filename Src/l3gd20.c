@@ -24,9 +24,9 @@ void L3GD20_INT_WriteSPI(uint8_t address, uint8_t data) {
 }
 
 DEV_Result_t L3GD20_Init(L3GD20_Scale_t scale) {
-	uint8_t r;
+	//uint8_t r;
 	
-	if (ITG_TestConnection()) return DEV_Result_Error;
+	if (L3GD20_TestConnection()) return DEV_Result_Error;
 
 	/* Enable L3GD20 Power bit */
 	L3GD20_INT_WriteSPI(L3GD20_REG_CTRL_REG1, 0xFF);
@@ -100,6 +100,7 @@ DEV_Result_t L3GD20_TestConnection()
 		/* Sensor connected is not L3GD20 */
 		return DEV_Result_Error;
 	}
+	return DEV_Result_Ok;
 }
 
 
